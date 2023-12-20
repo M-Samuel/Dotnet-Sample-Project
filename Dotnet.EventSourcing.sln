@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 25.0.1706.7
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dotnet.EventSourcing.Domain", "Dotnet.EventSourcing.Domain\Dotnet.EventSourcing.Domain.csproj", "{093B4C72-5727-4706-81B4-1C98B9DCCEDF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dotnet.EventSourcing.SharedKernel", "Dotnet.EventSourcing.SharedKernel\Dotnet.EventSourcing.SharedKernel.csproj", "{577725A2-7BA1-4B87-86D6-D70D90535B7B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{093B4C72-5727-4706-81B4-1C98B9DCCEDF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{093B4C72-5727-4706-81B4-1C98B9DCCEDF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{093B4C72-5727-4706-81B4-1C98B9DCCEDF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{093B4C72-5727-4706-81B4-1C98B9DCCEDF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{577725A2-7BA1-4B87-86D6-D70D90535B7B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{577725A2-7BA1-4B87-86D6-D70D90535B7B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{577725A2-7BA1-4B87-86D6-D70D90535B7B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{577725A2-7BA1-4B87-86D6-D70D90535B7B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {FDEFC78E-70D3-4BCE-850C-671A51D29D7B}
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="CustomerDomain\" />
+    <None Remove="IncidentDomian\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="CustomerDomain\" />
+    <Folder Include="IncidentDomian\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Dotnet.EventSourcing.SharedKernel\Dotnet.EventSourcing.SharedKernel.csproj" />
+  </ItemGroup>
+</Project>
