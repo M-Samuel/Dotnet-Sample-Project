@@ -1,52 +1,66 @@
 ﻿using System;
-using Dotnet.EventSourcing.Domain.CustomerDomain;
 using Dotnet.EventSourcing.Domain.IncidentDomain;
 using Dotnet.EventSourcing.Domain.IncidentDomian.IncidentDomainEvents;
+using Dotnet.EventSourcing.Domain.UserDomain;
 using Dotnet.EventSourcing.SharedKernel;
 
 namespace Dotnet.EventSourcing.Domain.IncidentDomian
 {
-    public class IncidentService
+    public class IncidentService : IIncidentService
     {
         private readonly IIncidentRepository _incidentRepository;
-        private readonly ICustomerRepository _customerRepository;
+        private readonly IUserRepository _userRepository;
 
         public IncidentService(
             IIncidentRepository incidentRepository,
-            ICustomerRepository customerRepository
+            IUserRepository userRepository
             )
         {
             _incidentRepository = incidentRepository;
-            _customerRepository = customerRepository;
+            _userRepository = userRepository;
         }
 
-        public async Task<Result<Incident>> ProcessDomainEvent(IncidentCreatedDomainEvent domainEvent)
+        public async Task<Result<Incident>> ProcessDomainEvent(OpenIncidentEvent domainEvent)
         {
-            Customer customer = await _customerRepository.GetCustomerById(domainEvent.CustomerId);
+            User customer = await _userRepository.GetUserById(domainEvent.CustomerId);
             Incident createdIncident = Incident.CreateNew(domainEvent.OccurranceDateTime, customer, domainEvent.IncidentDetails);
+            createdIncident.UpdateStatus(IncidentStatus.Opened, customer);
             Result<Incident> result = Result<Incident>.Create(createdIncident);
 
             return result;
         }
 
 
-        public async Task<Result<Incident>> ProcessDomainEvent(IncidentAcknowledgedDomainEvent domainEvent)
+        public async Task<Result<Incident>> ProcessDomainEvent(AcknowledgeIncidentEvent domainEvent)
         {
             Incident incident = await _incidentRepository.GetIncidentById(domainEvent.IncidentId);
+            User changedBy = await _userRepository.GetUserById(domainEvent.ChangedByUserId);
             Result<Incident> result = Result<Incident>.Create(incident);
             if (!incident.ValidateCanAcknowledge())
-            {
                 result.AddError(IncidentErrors.CannotAcknowledgeIncidentNotOpenedError);
-                return result;
-            }
+            if (!incident.ValidateHasAssignee())
+                result.AddError(IncidentErrors.CannotAcknowledgeAsNoAssigneeError);
 
-            incident.UpdateStatus(IncidentStatus.Acknowledged);
+            if (result.HasError)
+                return result;
+
+            incident.UpdateStatus(IncidentStatus.Acknowledged, changedBy);
             return result;
         }
 
-        public async Task<Result<Incident>> ProcessDomainEvent(IncidentInProgressDomainEvent domainEvent)
+        public async Task<Result<Incident>> ProcessDomainEvent(AssignIncidentEvent domainEvent)
         {
             Incident incident = await _incidentRepository.GetIncidentById(domainEvent.IncidentId);
+            User assignee = await _userRepository.GetUserById(domainEvent.AssigneeUserId);
+            Result<Incident> result = Result<Incident>.Create(incident);
+            incident.ChangeAssignee(assignee);
+            return result;
+        }
+
+        public async Task<Result<Incident>> ProcessDomainEvent(MoveIncidentToInProgressEvent domainEvent)
+        {
+            Incident incident = await _incidentRepository.GetIncidentById(domainEvent.IncidentId);
+            User changedBy = await _userRepository.GetUserById(domainEvent.ChangedByUserId);
             Result<Incident> result = Result<Incident>.Create(incident);
             if (!incident.ValidateCanInProgress())
             {
@@ -54,13 +68,14 @@ namespace Dotnet.EventSourcing.Domain.IncidentDomian
                 return result;
             }
 
-            incident.UpdateStatus(IncidentStatus.InProgress);
+            incident.UpdateStatus(IncidentStatus.InProgress, changedBy);
             return result;
         }
 
-        public async Task<Result<Incident>> ProcessDomainEvent(IncidentResumeFromStandyDomainEvent domainEvent)
+        public async Task<Result<Incident>> ProcessDomainEvent(ResumeIncidentEvent domainEvent)
         {
             Incident incident = await _incidentRepository.GetIncidentById(domainEvent.IncidentId);
+            User changedBy = await _userRepository.GetUserById(domainEvent.ChangedByUserId);
             Result<Incident> result = Result<Incident>.Create(incident);
             if (!incident.ValidateCanInProgress())
             {
@@ -68,13 +83,14 @@ namespace Dotnet.EventSourcing.Domain.IncidentDomian
                 return result;
             }
 
-            incident.UpdateStatus(IncidentStatus.InProgress);
+            incident.UpdateStatus(IncidentStatus.InProgress, changedBy);
             return result;
         }
 
-        public async Task<Result<Incident>> ProcessDomainEvent(IncidentStandByDomainEvent domainEvent)
+        public async Task<Result<Incident>> ProcessDomainEvent(MoveIncidentToStandByEvent domainEvent)
         {
             Incident incident = await _incidentRepository.GetIncidentById(domainEvent.IncidentId);
+            User changedBy = await _userRepository.GetUserById(domainEvent.ChangedByUserId);
             Result<Incident> result = Result<Incident>.Create(incident);
             if (!incident.ValidateCanStandy())
             {
@@ -82,13 +98,14 @@ namespace Dotnet.EventSourcing.Domain.IncidentDomian
                 return result;
             }
 
-            incident.UpdateStatus(IncidentStatus.StandBy);
+            incident.UpdateStatus(IncidentStatus.StandBy, changedBy);
             return result;
         }
 
-        public async Task<Result<Incident>> ProcessDomainEvent(IncidentCompletedDomainEvent domainEvent)
+        public async Task<Result<Incident>> ProcessDomainEvent(CompleteIncidentEvent domainEvent)
         {
             Incident incident = await _incidentRepository.GetIncidentById(domainEvent.IncidentId);
+            User changedBy = await _userRepository.GetUserById(domainEvent.ChangedByUserId);
             Result<Incident> result = Result<Incident>.Create(incident);
             if (!incident.ValidateCanComplete())
             {
@@ -96,13 +113,14 @@ namespace Dotnet.EventSourcing.Domain.IncidentDomian
                 return result;
             }
 
-            incident.UpdateStatus(IncidentStatus.Completed);
+            incident.UpdateStatus(IncidentStatus.Completed, changedBy);
             return result;
         }
 
-        public async Task<Result<Incident>> ProcessDomainEvent(IncidentValidatedDomainEvent domainEvent)
+        public async Task<Result<Incident>> ProcessDomainEvent(ValidateIncidentEvent domainEvent)
         {
             Incident incident = await _incidentRepository.GetIncidentById(domainEvent.IncidentId);
+            User changedBy = await _userRepository.GetUserById(domainEvent.ChangedByUserId);
             Result<Incident> result = Result<Incident>.Create(incident);
             if (!incident.ValidateCanClose())
             {
@@ -110,13 +128,14 @@ namespace Dotnet.EventSourcing.Domain.IncidentDomian
                 return result;
             }
 
-            incident.UpdateStatus(IncidentStatus.Closed);
+            incident.UpdateStatus(IncidentStatus.Closed, changedBy);
             return result;
         }
 
-        public async Task<Result<Incident>> ProcessDomainEvent(IncidentReOpenDomainEvent domainEvent)
+        public async Task<Result<Incident>> ProcessDomainEvent(ReOpenIncidentEvent domainEvent)
         {
             Incident incident = await _incidentRepository.GetIncidentById(domainEvent.IncidentId);
+            User changedBy = await _userRepository.GetUserById(domainEvent.ChangedByUserId);
             Result<Incident> result = Result<Incident>.Create(incident);
             if (!incident.ValidateCanReOpen())
             {
@@ -124,7 +143,7 @@ namespace Dotnet.EventSourcing.Domain.IncidentDomian
                 return result;
             }
 
-            incident.UpdateStatus(IncidentStatus.Opened);
+            incident.UpdateStatus(IncidentStatus.Opened, changedBy);
             return result;
         }
     }

@@ -36,6 +36,11 @@ namespace Dotnet.EventSourcing.Domain.IncidentDomian
         {
             return incident.Status == IncidentStatus.Completed;
         }
+
+        public static bool ValidateHasAssignee(this Incident incident)
+        {
+            return incident.Assignee != null;
+        }
     }
 }
 

@@ -20,6 +20,8 @@ namespace Dotnet.EventSourcing.Domain.IncidentDomian
             new("Cannot change Incident to Closed as status is not Completed");
         public static CannotReOpenIncidentNotCompletedError CannotReOpenIncidentNotCompletedError =>
             new("Cannot change Incident to Closed as status is not Completed");
+        public static CannotAcknowledgeAsNoAssigneeError CannotAcknowledgeAsNoAssigneeError =>
+            new("Cannot acknowledge Incident as incident has no assignee");
     }
 
 	public record CannotAcknowledgeIncidentNotOpenedError(string Message) : IError;
@@ -29,5 +31,6 @@ namespace Dotnet.EventSourcing.Domain.IncidentDomian
     public record CannotCompleteIncidentNotInProgressError(string Message) : IError;
     public record CannotCloseIncidentNotCompletedError(string Message) : IError;
     public record CannotReOpenIncidentNotCompletedError(string Message) : IError;
+    public record CannotAcknowledgeAsNoAssigneeError(string Message) : IError;
 }
 

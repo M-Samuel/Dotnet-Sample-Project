@@ -7,12 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="CustomerDomain\" />
     <None Remove="IncidentDomian\" />
+    <None Remove="UserDomain\" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="CustomerDomain\" />
     <Folder Include="IncidentDomian\" />
+    <Folder Include="UserDomain\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Dotnet.EventSourcing.SharedKernel\Dotnet.EventSourcing.SharedKernel.csproj" />

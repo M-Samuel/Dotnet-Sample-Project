@@ -1,47 +1,42 @@
 ﻿using System;
-using Dotnet.EventSourcing.Domain.CustomerDomain;
 using Dotnet.EventSourcing.Domain.IncidentDomian;
 using Dotnet.EventSourcing.Domain.IncidentDomian.IncidentDomainEvents;
+using Dotnet.EventSourcing.Domain.UserDomain;
 using Dotnet.EventSourcing.SharedKernel;
 
 namespace Dotnet.EventSourcing.Domain.IncidentDomain
 {
-	public class Incident : Entity
-	{
-		public Incident(Guid id, DateTime createdDate, Customer customer, IncidentDetails details) : base(id)
-		{
-			CreatedDate = createdDate;
-			Customer = customer;
-            IncidentDetails = details;
-            _incidentStatusChanges = new();
-        }
+    public class Incident : IEntity
+    {
 
-        public Incident(Guid id, DateTime createdDate, Customer customer, IncidentDetails details, List<IncidentStatusChange> incidentStatusChanges) : base(id)
-        {
-            CreatedDate = createdDate;
-            Customer = customer;
-            IncidentDetails = details;
-            _incidentStatusChanges = incidentStatusChanges;
-        }
-
+        public Guid Id { get; set; }
         public DateTime CreatedDate { get; set; }
-		public Customer Customer { get; set; }
-        public IncidentStatus Status { get; set; } = IncidentStatus.None;
-        public IncidentDetails IncidentDetails { get; set; }
+        public User? Customer { get; set; }
+        public User? Assignee { get; set; }
+        public IncidentStatus Status { get; set; }
+        public IncidentDetails? IncidentDetails { get; set; }
+        public List<IncidentStatusChange> IncidentStatusChanges { get; set; } = new();
 
-        private readonly List<IncidentStatusChange> _incidentStatusChanges;
-        public List<IncidentStatusChange> IncidentStatusChanges => _incidentStatusChanges.ToList();
-
-        public void UpdateStatus(IncidentStatus newStatus)
+        public void UpdateStatus(IncidentStatus newStatus, User changedBy)
         {
-            _incidentStatusChanges.Add(new IncidentStatusChange(Status, newStatus, DateTime.UtcNow));
+            IncidentStatusChanges.Add(new IncidentStatusChange(changedBy, Status, newStatus, DateTime.UtcNow));
             Status = newStatus;
         }
 
-        public static Incident CreateNew(DateTime createdDate, Customer customer, IncidentDetails details)
+        public void ChangeAssignee(User assignee)
+        {
+            Assignee = assignee;
+        }
+
+        public static Incident CreateNew(DateTime createdDate, User customer, IncidentDetails details)
 		{
-            Incident incident = new(Guid.NewGuid(), createdDate, customer, details);
-            incident.UpdateStatus(IncidentStatus.Opened);
+            Incident incident = new()
+            {
+                Id = Guid.NewGuid(),
+                CreatedDate = createdDate,
+                Customer = customer,
+                IncidentDetails = details
+            };
             return incident;
 		}
 	}
@@ -49,6 +44,7 @@ namespace Dotnet.EventSourcing.Domain.IncidentDomain
     public record IncidentDetails(string Title, string Description);
 
     public record IncidentStatusChange(
+        User ChangedBy,
         IncidentStatus OldStatus,
         IncidentStatus NewStatus,
         DateTime ChangedDateTime

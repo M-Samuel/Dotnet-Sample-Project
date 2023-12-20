@@ -1,21 +1,21 @@
 ﻿using System;
 namespace Dotnet.EventSourcing.SharedKernel
 {
-	public class Result<T>
+	public class Result<DEvent>
 	{
-		private Result(T value)
+		private Result(DEvent value)
 		{
 			Value = value;
 		}
 
-		public static Result<T> Create(T value)
+		public static Result<DEvent> Create(DEvent value)
 		{
-			return new Result<T>(value);
+			return new Result<DEvent>(value);
 		}
 
-        public T Value { get; }
+        public DEvent Value { get; }
 
-		public T GetValue() => Value;
+		public DEvent GetValue() => Value;
 
 
 
@@ -24,11 +24,11 @@ namespace Dotnet.EventSourcing.SharedKernel
 
 		public bool HasError => _errors.Count > 0;
 
-		public List<IError> Errors => _errors.ToList();
+		public List<IError> ErrorDomainEvents => _errors.ToList();
 
-		public Result<T> AddError(IError error)
+		public Result<DEvent> AddError(IError error)
 		{
-			_errors.Add(error);
+            _errors.Add(error);
 			return this;
 		}
 
