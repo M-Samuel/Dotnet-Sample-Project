@@ -1,6 +1,9 @@
-﻿using Dotnet.EventSourcing.Infrastructure.Contexts;
+﻿using Dotnet.EventSourcing.Domain.UserDomain;
+using Dotnet.EventSourcing.Domain.UserDomain.UserDomainEvents;
+using Dotnet.EventSourcing.Infrastructure.Contexts;
 using Dotnet.EventSourcing.Infrastructure.DTO.UserDTO;
 using Dotnet.EventSourcing.Infrastructure.Repositories;
+using Dotnet.EventSourcing.SharedKernel;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using System.Reflection.Metadata;
@@ -26,8 +29,8 @@ public class InMemoryDBTest
         context.Database.EnsureCreated();
 
         context.AddRange(
-            new User() { FirstName = "Sam", LastName = "Modeste", Id = Guid.NewGuid()},
-            new User() { FirstName = "Jo", LastName = "Modeste", Id = Guid.NewGuid() }
+            new Infrastructure.DTO.UserDTO.User() { FirstName = "Sam", LastName = "Modeste", Id = Guid.NewGuid()},
+            new Infrastructure.DTO.UserDTO.User() { FirstName = "Jo", LastName = "Modeste", Id = Guid.NewGuid() }
             );
 
         context.SaveChanges();
@@ -39,7 +42,7 @@ public class InMemoryDBTest
         using var context = new DatabaseContext(_contextOptions);
         UserRepository userRepository = new UserRepository(context);
 
-        Domain.UserDomain.User? user = await userRepository.GetUserByName("Sam", "Modeste");
+        Domain.UserDomain.User? user = await userRepository.GetUserByNameAsync("Sam", "Modeste");
         Assert.IsNotNull(user);
 
     }
@@ -50,14 +53,34 @@ public class InMemoryDBTest
         using var context = new DatabaseContext(_contextOptions);
         UserRepository userRepository = new UserRepository(context);
 
-        await userRepository.CreateUser(new Domain.UserDomain.User() { FullName = new Domain.UserDomain.FullName("Kevin", "Modeste"), Id = Guid.NewGuid() });
+        await userRepository.CreateUserAsync(new Domain.UserDomain.User() { FullName = new Domain.UserDomain.FullName("Kevin", "Modeste"), Id = Guid.NewGuid() });
 
         context.SaveChanges();
 
 
-        Domain.UserDomain.User? user = await userRepository.GetUserByName("Kevin", "Modeste");
+        Domain.UserDomain.User? user = await userRepository.GetUserByNameAsync("Kevin", "Modeste");
 
         Assert.IsNotNull(user);
 
     }
+
+    [TestMethod]
+    public async Task UserServiceCreateUser()
+    {
+        using var context = new DatabaseContext(_contextOptions);
+        UserRepository userRepository = new UserRepository(context);
+        UserService userService = new(userRepository);
+
+        var result = await userService.ProcessDomainEvent(new CreateUserEvent(DateTime.UtcNow, "Sam", "Modeste"));
+
+        foreach(IError error in result.ErrorDomainEvents)
+        {
+            Console.WriteLine(error.Message);
+        }
+        Assert.IsTrue(result.HasError);
+        
+
+    }
+
+
 }

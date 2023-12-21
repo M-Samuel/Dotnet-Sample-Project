@@ -1,11 +1,15 @@
 ﻿using System;
+using Dotnet.EventSourcing.SharedKernel;
+
 namespace Dotnet.EventSourcing.Domain.UserDomain
 {
 	public interface IUserRepository
 	{
-		Task<User?> GetUserById(Guid userId);
-        Task<User?> GetUserByName(string firstName, string lastName);
-        Task CreateUser(User user);
+        IUnitOfWork UnitOfWork { get; }
+		Task<User?> GetUserByIdAsync(Guid userId);
+        Task<User?> GetUserByNameAsync(string firstName, string lastName);
+        Task CreateUserAsync(User user);
+
 
     }
 }

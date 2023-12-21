@@ -24,7 +24,7 @@ namespace Dotnet.EventSourcing.Domain.IncidentDomian
 
         public async Task<Result<Incident>> ProcessDomainEvent(OpenIncidentEvent domainEvent)
         {
-            User? customer = await _userRepository.GetUserById(domainEvent.CustomerId);
+            User? customer = await _userRepository.GetUserByIdAsync(domainEvent.CustomerId);
             if(customer == null)
             {
                 Result<Incident> resultError = Result<Incident>.Create();
@@ -33,8 +33,10 @@ namespace Dotnet.EventSourcing.Domain.IncidentDomian
             }
             Incident createdIncident = Incident.CreateNew(domainEvent.OccurranceDateTime, customer, domainEvent.IncidentDetails);
             createdIncident.UpdateStatus(IncidentStatus.Opened, customer);
-            await _incidentRepository.CreateIncident(createdIncident);
+            await _incidentRepository.CreateIncidentAsync(createdIncident);
             Result<Incident> result = Result<Incident>.Create(createdIncident);
+
+            await _incidentRepository.UnitOfWork.CommitChangesAsync();
 
             return result;
         }
@@ -52,8 +54,8 @@ namespace Dotnet.EventSourcing.Domain.IncidentDomian
 
         public async Task<Result<Incident>> ProcessDomainEvent(AcknowledgeIncidentEvent domainEvent)
         {
-            Incident? incident = await _incidentRepository.GetIncidentById(domainEvent.IncidentId);
-            User? changedBy = await _userRepository.GetUserById(domainEvent.ChangedByUserId);
+            Incident? incident = await _incidentRepository.GetIncidentByIdAsync(domainEvent.IncidentId);
+            User? changedBy = await _userRepository.GetUserByIdAsync(domainEvent.ChangedByUserId);
 
             Result<Incident> result = Result<Incident>.Create();
 
@@ -71,16 +73,18 @@ namespace Dotnet.EventSourcing.Domain.IncidentDomian
             {
                 incident.UpdateStatus(IncidentStatus.Acknowledged, changedBy);
                 result.UpdateValueIfNoError(incident);
-                await _incidentRepository.UpdateIncident(incident);
+                await _incidentRepository.UpdateIncidentAsync(incident);
+                await _incidentRepository.UnitOfWork.CommitChangesAsync();
             }
-                
+
+
             return result;
         }
 
         public async Task<Result<Incident>> ProcessDomainEvent(AssignIncidentEvent domainEvent)
         {
-            Incident? incident = await _incidentRepository.GetIncidentById(domainEvent.IncidentId);
-            User? assignee = await _userRepository.GetUserById(domainEvent.AssigneeUserId);
+            Incident? incident = await _incidentRepository.GetIncidentByIdAsync(domainEvent.IncidentId);
+            User? assignee = await _userRepository.GetUserByIdAsync(domainEvent.AssigneeUserId);
 
 
             Result<Incident> result = Result<Incident>.Create();
@@ -96,7 +100,8 @@ namespace Dotnet.EventSourcing.Domain.IncidentDomian
             {
                 incident.ChangeAssignee(assignee);
                 result.UpdateValueIfNoError(incident);
-                await _incidentRepository.UpdateIncident(incident);
+                await _incidentRepository.UpdateIncidentAsync(incident);
+                await _incidentRepository.UnitOfWork.CommitChangesAsync();
             }
                 
             return result;
@@ -104,8 +109,8 @@ namespace Dotnet.EventSourcing.Domain.IncidentDomian
 
         public async Task<Result<Incident>> ProcessDomainEvent(MoveIncidentToInProgressEvent domainEvent)
         {
-            Incident? incident = await _incidentRepository.GetIncidentById(domainEvent.IncidentId);
-            User? changedBy = await _userRepository.GetUserById(domainEvent.ChangedByUserId);
+            Incident? incident = await _incidentRepository.GetIncidentByIdAsync(domainEvent.IncidentId);
+            User? changedBy = await _userRepository.GetUserByIdAsync(domainEvent.ChangedByUserId);
 
             Result<Incident> result = Result<Incident>.Create();
 
@@ -121,7 +126,8 @@ namespace Dotnet.EventSourcing.Domain.IncidentDomian
             {
                 incident.UpdateStatus(IncidentStatus.InProgress, changedBy);
                 result.UpdateValueIfNoError(incident);
-                await _incidentRepository.UpdateIncident(incident);
+                await _incidentRepository.UpdateIncidentAsync(incident);
+                await _incidentRepository.UnitOfWork.CommitChangesAsync();
             }
                 
             return result;
@@ -129,8 +135,8 @@ namespace Dotnet.EventSourcing.Domain.IncidentDomian
 
         public async Task<Result<Incident>> ProcessDomainEvent(ResumeIncidentEvent domainEvent)
         {
-            Incident? incident = await _incidentRepository.GetIncidentById(domainEvent.IncidentId);
-            User? changedBy = await _userRepository.GetUserById(domainEvent.ChangedByUserId);
+            Incident? incident = await _incidentRepository.GetIncidentByIdAsync(domainEvent.IncidentId);
+            User? changedBy = await _userRepository.GetUserByIdAsync(domainEvent.ChangedByUserId);
 
             Result<Incident> result = Result<Incident>.Create();
 
@@ -146,15 +152,16 @@ namespace Dotnet.EventSourcing.Domain.IncidentDomian
             {
                 incident.UpdateStatus(IncidentStatus.InProgress, changedBy);
                 result.UpdateValueIfNoError(incident);
-                await _incidentRepository.UpdateIncident(incident);
+                await _incidentRepository.UpdateIncidentAsync(incident);
+                await _incidentRepository.UnitOfWork.CommitChangesAsync();
             }
             return result;
         }
 
         public async Task<Result<Incident>> ProcessDomainEvent(MoveIncidentToStandByEvent domainEvent)
         {
-            Incident?incident = await _incidentRepository.GetIncidentById(domainEvent.IncidentId);
-            User? changedBy = await _userRepository.GetUserById(domainEvent.ChangedByUserId);
+            Incident?incident = await _incidentRepository.GetIncidentByIdAsync(domainEvent.IncidentId);
+            User? changedBy = await _userRepository.GetUserByIdAsync(domainEvent.ChangedByUserId);
 
 
             Result<Incident> result = Result<Incident>.Create();
@@ -171,15 +178,16 @@ namespace Dotnet.EventSourcing.Domain.IncidentDomian
             {
                 incident.UpdateStatus(IncidentStatus.StandBy, changedBy);
                 result.UpdateValueIfNoError(incident);
-                await _incidentRepository.UpdateIncident(incident);
+                await _incidentRepository.UpdateIncidentAsync(incident);
+                await _incidentRepository.UnitOfWork.CommitChangesAsync();
             }
             return result;
         }
 
         public async Task<Result<Incident>> ProcessDomainEvent(CompleteIncidentEvent domainEvent)
         {
-            Incident? incident = await _incidentRepository.GetIncidentById(domainEvent.IncidentId);
-            User? changedBy = await _userRepository.GetUserById(domainEvent.ChangedByUserId);
+            Incident? incident = await _incidentRepository.GetIncidentByIdAsync(domainEvent.IncidentId);
+            User? changedBy = await _userRepository.GetUserByIdAsync(domainEvent.ChangedByUserId);
 
 
             Result<Incident> result = Result<Incident>.Create();
@@ -196,7 +204,8 @@ namespace Dotnet.EventSourcing.Domain.IncidentDomian
             {
                 incident.UpdateStatus(IncidentStatus.Completed, changedBy);
                 result.UpdateValueIfNoError(incident);
-                await _incidentRepository.UpdateIncident(incident);
+                await _incidentRepository.UpdateIncidentAsync(incident);
+                await _incidentRepository.UnitOfWork.CommitChangesAsync();
             }
                 
             return result;
@@ -204,8 +213,8 @@ namespace Dotnet.EventSourcing.Domain.IncidentDomian
 
         public async Task<Result<Incident>> ProcessDomainEvent(ValidateIncidentEvent domainEvent)
         {
-            Incident? incident = await _incidentRepository.GetIncidentById(domainEvent.IncidentId);
-            User? changedBy = await _userRepository.GetUserById(domainEvent.ChangedByUserId);
+            Incident? incident = await _incidentRepository.GetIncidentByIdAsync(domainEvent.IncidentId);
+            User? changedBy = await _userRepository.GetUserByIdAsync(domainEvent.ChangedByUserId);
 
 
             Result<Incident> result = Result<Incident>.Create();
@@ -222,7 +231,8 @@ namespace Dotnet.EventSourcing.Domain.IncidentDomian
             {
                 incident.UpdateStatus(IncidentStatus.Closed, changedBy);
                 result.UpdateValueIfNoError(incident);
-                await _incidentRepository.UpdateIncident(incident);
+                await _incidentRepository.UpdateIncidentAsync(incident);
+                await _incidentRepository.UnitOfWork.CommitChangesAsync();
             }
 
             return result;
@@ -230,8 +240,8 @@ namespace Dotnet.EventSourcing.Domain.IncidentDomian
 
         public async Task<Result<Incident>> ProcessDomainEvent(ReOpenIncidentEvent domainEvent)
         {
-            Incident? incident = await _incidentRepository.GetIncidentById(domainEvent.IncidentId);
-            User? changedBy = await _userRepository.GetUserById(domainEvent.ChangedByUserId);
+            Incident? incident = await _incidentRepository.GetIncidentByIdAsync(domainEvent.IncidentId);
+            User? changedBy = await _userRepository.GetUserByIdAsync(domainEvent.ChangedByUserId);
 
             Result<Incident> result = Result<Incident>.Create();
 
@@ -247,7 +257,8 @@ namespace Dotnet.EventSourcing.Domain.IncidentDomian
             {
                 incident.UpdateStatus(IncidentStatus.Opened, changedBy);
                 result.UpdateValueIfNoError(incident);
-                await _incidentRepository.UpdateIncident(incident);
+                await _incidentRepository.UpdateIncidentAsync(incident);
+                await _incidentRepository.UnitOfWork.CommitChangesAsync();
             }
             
             return result;

@@ -18,7 +18,7 @@ namespace Dotnet.EventSourcing.Domain.UserDomain
 
         public async Task<Result<User>> ProcessDomainEvent(CreateUserEvent createUserEvent)
         {
-            User? duplicateUser = await _userRepository.GetUserByName(createUserEvent.FirstName, createUserEvent.LastName);
+            User? duplicateUser = await _userRepository.GetUserByNameAsync(createUserEvent.FirstName, createUserEvent.LastName);
 
             Result<User> result = Result<User>.Create();
             result
@@ -30,8 +30,10 @@ namespace Dotnet.EventSourcing.Domain.UserDomain
                 return result;
 
             User user = User.Create(new FullName(createUserEvent.FirstName, createUserEvent.LastName));
-            await _userRepository.CreateUser(user);
+            await _userRepository.CreateUserAsync(user);
             result.UpdateValueIfNoError(user);
+
+            await _userRepository.UnitOfWork.CommitChangesAsync();
 
             return result;
         }

@@ -5,6 +5,7 @@ using Dotnet.EventSourcing.Infrastructure.Contexts;
 using UserDTO = Dotnet.EventSourcing.Infrastructure.DTO.UserDTO;
 using UserDomain = Dotnet.EventSourcing.Domain.UserDomain;
 using Dotnet.EventSourcing.Infrastructure.DTO.UserDTO;
+using Dotnet.EventSourcing.SharedKernel;
 
 namespace Dotnet.EventSourcing.Infrastructure.Repositories
 {
@@ -17,14 +18,15 @@ namespace Dotnet.EventSourcing.Infrastructure.Repositories
             _databaseContext = databaseContext;
         }
 
-        public async Task CreateUser(UserDomain.User user)
+        public IUnitOfWork UnitOfWork => _databaseContext;
+
+        public async Task CreateUserAsync(UserDomain.User user)
         {
             UserDTO.User userDTO = user.ToDTO();
             await _databaseContext.AddAsync(userDTO);
-            await _databaseContext.SaveChangesAsync();
         }
 
-        public async Task<UserDomain.User?> GetUserById(Guid userId)
+        public async Task<UserDomain.User?> GetUserByIdAsync(Guid userId)
         {
             var users = await GetUsers((query) => query.Where(user => user.Id == userId));
             return await Task.FromResult(users.FirstOrDefault());
@@ -44,7 +46,7 @@ namespace Dotnet.EventSourcing.Infrastructure.Repositories
             return await Task.FromResult(users);
         }
 
-        public async Task<UserDomain.User?> GetUserByName(string firstName, string lastName)
+        public async Task<UserDomain.User?> GetUserByNameAsync(string firstName, string lastName)
         {
             var users = await GetUsers((query) =>
                                 query.Where(user => user.FirstName == firstName && user.LastName == lastName));
