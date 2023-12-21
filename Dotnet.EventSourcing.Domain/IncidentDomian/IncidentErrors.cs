@@ -32,5 +32,8 @@ namespace Dotnet.EventSourcing.Domain.IncidentDomian
     public record CannotCloseIncidentNotCompletedError(string Message) : IError;
     public record CannotReOpenIncidentNotCompletedError(string Message) : IError;
     public record CannotAcknowledgeAsNoAssigneeError(string Message) : IError;
+
+    public record UserNotFoundError(string Message) : IError;
+    public record IncidentNotFoundError(string Message) : IError;
 }
 

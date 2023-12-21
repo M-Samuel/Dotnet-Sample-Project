@@ -1,0 +1,28 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="7.0.14" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="DTO\" />
+    <None Remove="DTO\UserDTO\" />
+    <None Remove="Repositories\" />
+    <None Remove="Contexts\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="DTO\" />
+    <Folder Include="DTO\UserDTO\" />
+    <Folder Include="Repositories\" />
+    <Folder Include="Contexts\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Dotnet.EventSourcing.Domain\Dotnet.EventSourcing.Domain.csproj" />
+    <ProjectReference Include="..\Dotnet.EventSourcing.SharedKernel\Dotnet.EventSourcing.SharedKernel.csproj" />
+  </ItemGroup>
+</Project>

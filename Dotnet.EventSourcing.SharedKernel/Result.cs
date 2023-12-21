@@ -1,23 +1,31 @@
 ﻿using System;
 namespace Dotnet.EventSourcing.SharedKernel
 {
-	public class Result<DEvent>
+	public class Result<DEvent> where DEvent : new()
 	{
 		private Result(DEvent value)
 		{
 			Value = value;
 		}
 
-		public static Result<DEvent> Create(DEvent value)
+        private Result()
+        {
+			Value = new();
+        }
+
+        public static Result<DEvent> Create(DEvent value)
 		{
 			return new Result<DEvent>(value);
 		}
 
-        public DEvent Value { get; }
+        public static Result<DEvent> Create()
+        {
+            return new Result<DEvent>();
+        }
+
+        public DEvent Value { get; private set; }
 
 		public DEvent GetValue() => Value;
-
-
 
 
 		private readonly List<IError> _errors = new();
@@ -30,6 +38,20 @@ namespace Dotnet.EventSourcing.SharedKernel
 		{
             _errors.Add(error);
 			return this;
+		}
+
+		public Result<DEvent> AddErrorIf(Func<bool> predicate, IError errorToBeAddIfTrue)
+		{
+			if (predicate())
+				AddError(errorToBeAddIfTrue);
+
+			return this;
+		}
+
+		public void UpdateValueIfNoError(DEvent value)
+		{
+			if(!HasError)
+				Value = value;
 		}
 
     }
