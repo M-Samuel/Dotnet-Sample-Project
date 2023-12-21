@@ -36,8 +36,6 @@ namespace Dotnet.EventSourcing.Domain.IncidentDomian
             await _incidentRepository.CreateIncidentAsync(createdIncident);
             Result<Incident> result = Result<Incident>.Create(createdIncident);
 
-            await _incidentRepository.UnitOfWork.CommitChangesAsync();
-
             return result;
         }
 
@@ -74,7 +72,6 @@ namespace Dotnet.EventSourcing.Domain.IncidentDomian
                 incident.UpdateStatus(IncidentStatus.Acknowledged, changedBy);
                 result.UpdateValueIfNoError(incident);
                 await _incidentRepository.UpdateIncidentAsync(incident);
-                await _incidentRepository.UnitOfWork.CommitChangesAsync();
             }
 
 
@@ -101,7 +98,6 @@ namespace Dotnet.EventSourcing.Domain.IncidentDomian
                 incident.ChangeAssignee(assignee);
                 result.UpdateValueIfNoError(incident);
                 await _incidentRepository.UpdateIncidentAsync(incident);
-                await _incidentRepository.UnitOfWork.CommitChangesAsync();
             }
                 
             return result;
@@ -127,7 +123,6 @@ namespace Dotnet.EventSourcing.Domain.IncidentDomian
                 incident.UpdateStatus(IncidentStatus.InProgress, changedBy);
                 result.UpdateValueIfNoError(incident);
                 await _incidentRepository.UpdateIncidentAsync(incident);
-                await _incidentRepository.UnitOfWork.CommitChangesAsync();
             }
                 
             return result;
@@ -153,7 +148,6 @@ namespace Dotnet.EventSourcing.Domain.IncidentDomian
                 incident.UpdateStatus(IncidentStatus.InProgress, changedBy);
                 result.UpdateValueIfNoError(incident);
                 await _incidentRepository.UpdateIncidentAsync(incident);
-                await _incidentRepository.UnitOfWork.CommitChangesAsync();
             }
             return result;
         }
@@ -179,7 +173,6 @@ namespace Dotnet.EventSourcing.Domain.IncidentDomian
                 incident.UpdateStatus(IncidentStatus.StandBy, changedBy);
                 result.UpdateValueIfNoError(incident);
                 await _incidentRepository.UpdateIncidentAsync(incident);
-                await _incidentRepository.UnitOfWork.CommitChangesAsync();
             }
             return result;
         }
@@ -205,7 +198,6 @@ namespace Dotnet.EventSourcing.Domain.IncidentDomian
                 incident.UpdateStatus(IncidentStatus.Completed, changedBy);
                 result.UpdateValueIfNoError(incident);
                 await _incidentRepository.UpdateIncidentAsync(incident);
-                await _incidentRepository.UnitOfWork.CommitChangesAsync();
             }
                 
             return result;
@@ -232,7 +224,6 @@ namespace Dotnet.EventSourcing.Domain.IncidentDomian
                 incident.UpdateStatus(IncidentStatus.Closed, changedBy);
                 result.UpdateValueIfNoError(incident);
                 await _incidentRepository.UpdateIncidentAsync(incident);
-                await _incidentRepository.UnitOfWork.CommitChangesAsync();
             }
 
             return result;
@@ -258,7 +249,6 @@ namespace Dotnet.EventSourcing.Domain.IncidentDomian
                 incident.UpdateStatus(IncidentStatus.Opened, changedBy);
                 result.UpdateValueIfNoError(incident);
                 await _incidentRepository.UpdateIncidentAsync(incident);
-                await _incidentRepository.UnitOfWork.CommitChangesAsync();
             }
             
             return result;

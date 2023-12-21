@@ -6,7 +6,6 @@ namespace Dotnet.EventSourcing.Domain.IncidentDomian
 {
 	public interface IIncidentRepository
 	{
-		IUnitOfWork UnitOfWork { get; }
 		Task<Incident?> GetIncidentByIdAsync(Guid incidentId);
 		Task CreateIncidentAsync(Incident incident);
 		Task UpdateIncidentAsync(Incident incident);

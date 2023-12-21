@@ -33,8 +33,6 @@ namespace Dotnet.EventSourcing.Domain.UserDomain
             await _userRepository.CreateUserAsync(user);
             result.UpdateValueIfNoError(user);
 
-            await _userRepository.UnitOfWork.CommitChangesAsync();
-
             return result;
         }
     }

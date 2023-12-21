@@ -18,8 +18,6 @@ namespace Dotnet.EventSourcing.Infrastructure.Repositories
             _databaseContext = databaseContext;
         }
 
-        public IUnitOfWork UnitOfWork => _databaseContext;
-
         public async Task CreateUserAsync(UserDomain.User user)
         {
             UserDTO.User userDTO = user.ToDTO();
