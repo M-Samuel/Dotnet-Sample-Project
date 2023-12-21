@@ -19,7 +19,7 @@ namespace Dotnet.EventSourcing.Domain.IncidentDomain
 
         public void UpdateStatus(IncidentStatus newStatus, User changedBy)
         {
-            IncidentStatusChanges.Add(new IncidentStatusChange(changedBy, Status, newStatus, DateTime.UtcNow));
+            IncidentStatusChanges.Add(new IncidentStatusChange(Guid.NewGuid(), changedBy, Status, newStatus, DateTime.UtcNow));
             Status = newStatus;
         }
 
@@ -42,13 +42,6 @@ namespace Dotnet.EventSourcing.Domain.IncidentDomain
 	}
 
     public record IncidentDetails(string Title, string Description);
-
-    public record IncidentStatusChange(
-        User ChangedBy,
-        IncidentStatus OldStatus,
-        IncidentStatus NewStatus,
-        DateTime ChangedDateTime
-    );
 
 
     public enum IncidentStatus

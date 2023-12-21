@@ -5,9 +5,19 @@ namespace Dotnet.EventSourcing.Domain.UserDomain
 {
 	public class User: IEntity
 	{
-        public required Guid Id { get; set; }
+        public Guid Id { get; set; }
 
-        public required FullName FullName { get; set; }
+        public FullName? FullName { get; set; }
+
+        public static User Create(FullName fullName)
+        {
+            User newUser = new()
+            {
+                Id = Guid.NewGuid(),
+                FullName = fullName
+            };
+            return newUser;
+        }
     }
 
     public record FullName(string FirstName, string LastName);

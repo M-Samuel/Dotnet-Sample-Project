@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Dotnet.EventSourcing.Domain.UserDomain;
 using Dotnet.EventSourcing.Infrastructure.Contexts;
 using UserDTO = Dotnet.EventSourcing.Infrastructure.DTO.UserDTO;
@@ -20,15 +21,35 @@ namespace Dotnet.EventSourcing.Infrastructure.Repositories
         {
             UserDTO.User userDTO = user.ToDTO();
             await _databaseContext.AddAsync(userDTO);
+            await _databaseContext.SaveChangesAsync();
         }
 
         public async Task<UserDomain.User?> GetUserById(Guid userId)
         {
-            UserDTO.User? userDTO = _databaseContext.Users.FirstOrDefault(user => user.Id == userId);
-            if (userDTO == null)
-                return await Task.FromResult<UserDomain.User?>(null);
+            var users = await GetUsers((query) => query.Where(user => user.Id == userId));
+            return await Task.FromResult(users.FirstOrDefault());
+        }
 
-            return await Task.FromResult<UserDomain.User?>(userDTO.ToDomain());
+        private async Task<IEnumerable<UserDomain.User>> GetUsers(Func<IQueryable<UserDTO.User>,IQueryable<UserDTO.User>>? conditions)
+        {
+            IQueryable<UserDTO.User> query = _databaseContext.Users.AsQueryable();
+            if (conditions != null)
+                query = conditions(query);
+
+            IEnumerable<UserDomain.User> users =
+                query
+                .Select(userDTO => userDTO.ToDomain())
+                .AsEnumerable();
+
+            return await Task.FromResult(users);
+        }
+
+        public async Task<UserDomain.User?> GetUserByName(string firstName, string lastName)
+        {
+            var users = await GetUsers((query) =>
+                                query.Where(user => user.FirstName == firstName && user.LastName == lastName));
+
+            return await Task.FromResult(users.FirstOrDefault());
         }
     }
 }

@@ -33,6 +33,7 @@ namespace Dotnet.EventSourcing.Domain.IncidentDomian
             }
             Incident createdIncident = Incident.CreateNew(domainEvent.OccurranceDateTime, customer, domainEvent.IncidentDetails);
             createdIncident.UpdateStatus(IncidentStatus.Opened, customer);
+            await _incidentRepository.CreateIncident(createdIncident);
             Result<Incident> result = Result<Incident>.Create(createdIncident);
 
             return result;
@@ -70,6 +71,7 @@ namespace Dotnet.EventSourcing.Domain.IncidentDomian
             {
                 incident.UpdateStatus(IncidentStatus.Acknowledged, changedBy);
                 result.UpdateValueIfNoError(incident);
+                await _incidentRepository.UpdateIncident(incident);
             }
                 
             return result;
@@ -94,6 +96,7 @@ namespace Dotnet.EventSourcing.Domain.IncidentDomian
             {
                 incident.ChangeAssignee(assignee);
                 result.UpdateValueIfNoError(incident);
+                await _incidentRepository.UpdateIncident(incident);
             }
                 
             return result;
@@ -118,6 +121,7 @@ namespace Dotnet.EventSourcing.Domain.IncidentDomian
             {
                 incident.UpdateStatus(IncidentStatus.InProgress, changedBy);
                 result.UpdateValueIfNoError(incident);
+                await _incidentRepository.UpdateIncident(incident);
             }
                 
             return result;
@@ -142,6 +146,7 @@ namespace Dotnet.EventSourcing.Domain.IncidentDomian
             {
                 incident.UpdateStatus(IncidentStatus.InProgress, changedBy);
                 result.UpdateValueIfNoError(incident);
+                await _incidentRepository.UpdateIncident(incident);
             }
             return result;
         }
@@ -166,6 +171,7 @@ namespace Dotnet.EventSourcing.Domain.IncidentDomian
             {
                 incident.UpdateStatus(IncidentStatus.StandBy, changedBy);
                 result.UpdateValueIfNoError(incident);
+                await _incidentRepository.UpdateIncident(incident);
             }
             return result;
         }
@@ -190,6 +196,7 @@ namespace Dotnet.EventSourcing.Domain.IncidentDomian
             {
                 incident.UpdateStatus(IncidentStatus.Completed, changedBy);
                 result.UpdateValueIfNoError(incident);
+                await _incidentRepository.UpdateIncident(incident);
             }
                 
             return result;
@@ -215,6 +222,7 @@ namespace Dotnet.EventSourcing.Domain.IncidentDomian
             {
                 incident.UpdateStatus(IncidentStatus.Closed, changedBy);
                 result.UpdateValueIfNoError(incident);
+                await _incidentRepository.UpdateIncident(incident);
             }
 
             return result;
@@ -239,6 +247,7 @@ namespace Dotnet.EventSourcing.Domain.IncidentDomian
             {
                 incident.UpdateStatus(IncidentStatus.Opened, changedBy);
                 result.UpdateValueIfNoError(incident);
+                await _incidentRepository.UpdateIncident(incident);
             }
             
             return result;
