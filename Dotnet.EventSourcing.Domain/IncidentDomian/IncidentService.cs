@@ -25,7 +25,7 @@ namespace Dotnet.EventSourcing.Domain.IncidentDomian
         public async Task<Result<Incident>> ProcessDomainEvent(OpenIncidentEvent domainEvent)
         {
             User? customer = await _userRepository.GetUserByIdAsync(domainEvent.CustomerId);
-            if(customer == null)
+            if (customer == null)
             {
                 Result<Incident> resultError = Result<Incident>.Create();
                 resultError.AddError(new UserNotFoundError($"User with id does not exists {domainEvent.CustomerId}"));
@@ -58,8 +58,8 @@ namespace Dotnet.EventSourcing.Domain.IncidentDomian
             Result<Incident> result = Result<Incident>.Create();
 
             result
-                .AddErrorIf(() => incident == null, CreateUserNotExistsError(domainEvent.IncidentId))
-                .AddErrorIf(() => changedBy == null, CreateIncidentNotExistsError(domainEvent.ChangedByUserId))
+                .AddErrorIf(() => incident == null, CreateIncidentNotExistsError(domainEvent.IncidentId))
+                .AddErrorIf(() => changedBy == null, CreateUserNotExistsError(domainEvent.ChangedByUserId))
                 .AddErrorIf(() => incident != null && !incident.ValidateCanAcknowledge(), IncidentErrors.CannotAcknowledgeIncidentNotOpenedError)
                 .AddErrorIf(() => incident != null && !incident.ValidateHasAssignee(), IncidentErrors.CannotAcknowledgeAsNoAssigneeError);
 
@@ -67,7 +67,7 @@ namespace Dotnet.EventSourcing.Domain.IncidentDomian
                 return result;
 
 
-            if(incident != null && changedBy != null)
+            if (incident != null && changedBy != null)
             {
                 incident.UpdateStatus(IncidentStatus.Acknowledged, changedBy);
                 result.UpdateValueIfNoError(incident);
@@ -87,8 +87,8 @@ namespace Dotnet.EventSourcing.Domain.IncidentDomian
             Result<Incident> result = Result<Incident>.Create();
 
             result
-                .AddErrorIf(() => incident == null, CreateUserNotExistsError(domainEvent.IncidentId))
-                .AddErrorIf(() => assignee == null, CreateIncidentNotExistsError(domainEvent.AssigneeUserId));
+                .AddErrorIf(() => incident == null, CreateIncidentNotExistsError(domainEvent.IncidentId))
+                .AddErrorIf(() => assignee == null, CreateUserNotExistsError(domainEvent.AssigneeUserId));
 
             if (result.HasError)
                 return result;
@@ -99,7 +99,7 @@ namespace Dotnet.EventSourcing.Domain.IncidentDomian
                 result.UpdateValueIfNoError(incident);
                 await _incidentRepository.UpdateIncidentAsync(incident);
             }
-                
+
             return result;
         }
 
@@ -124,7 +124,7 @@ namespace Dotnet.EventSourcing.Domain.IncidentDomian
                 result.UpdateValueIfNoError(incident);
                 await _incidentRepository.UpdateIncidentAsync(incident);
             }
-                
+
             return result;
         }
 
@@ -136,8 +136,8 @@ namespace Dotnet.EventSourcing.Domain.IncidentDomian
             Result<Incident> result = Result<Incident>.Create();
 
             result
-                .AddErrorIf(() => incident == null, CreateUserNotExistsError(domainEvent.IncidentId))
-                .AddErrorIf(() => changedBy == null, CreateIncidentNotExistsError(domainEvent.ChangedByUserId))
+                .AddErrorIf(() => incident == null, CreateIncidentNotExistsError(domainEvent.IncidentId))
+                .AddErrorIf(() => changedBy == null, CreateUserNotExistsError(domainEvent.ChangedByUserId))
                 .AddErrorIf(() => incident != null && !incident.ValidateCanInProgress(), IncidentErrors.CannotInProgressIncidentNotStandByError);
 
             if (result.HasError)
@@ -154,15 +154,15 @@ namespace Dotnet.EventSourcing.Domain.IncidentDomian
 
         public async Task<Result<Incident>> ProcessDomainEvent(MoveIncidentToStandByEvent domainEvent)
         {
-            Incident?incident = await _incidentRepository.GetIncidentByIdAsync(domainEvent.IncidentId);
+            Incident? incident = await _incidentRepository.GetIncidentByIdAsync(domainEvent.IncidentId);
             User? changedBy = await _userRepository.GetUserByIdAsync(domainEvent.ChangedByUserId);
 
 
             Result<Incident> result = Result<Incident>.Create();
 
             result
-                .AddErrorIf(() => incident == null, CreateUserNotExistsError(domainEvent.IncidentId))
-                .AddErrorIf(() => changedBy == null, CreateIncidentNotExistsError(domainEvent.ChangedByUserId))
+                .AddErrorIf(() => incident == null, CreateIncidentNotExistsError(domainEvent.IncidentId))
+                .AddErrorIf(() => changedBy == null, CreateUserNotExistsError(domainEvent.ChangedByUserId))
                 .AddErrorIf(() => incident != null && !incident.ValidateCanStandy(), IncidentErrors.CannotStandByIncidentNotInProgressError);
 
             if (result.HasError)
@@ -186,8 +186,8 @@ namespace Dotnet.EventSourcing.Domain.IncidentDomian
             Result<Incident> result = Result<Incident>.Create();
 
             result
-                .AddErrorIf(() => incident == null, CreateUserNotExistsError(domainEvent.IncidentId))
-                .AddErrorIf(() => changedBy == null, CreateIncidentNotExistsError(domainEvent.ChangedByUserId))
+                .AddErrorIf(() => incident == null, CreateIncidentNotExistsError(domainEvent.IncidentId))
+                .AddErrorIf(() => changedBy == null, CreateUserNotExistsError(domainEvent.ChangedByUserId))
                 .AddErrorIf(() => incident != null && !incident.ValidateCanComplete(), IncidentErrors.CannotCompleteIncidentNotInProgressError);
 
             if (result.HasError)
@@ -199,7 +199,7 @@ namespace Dotnet.EventSourcing.Domain.IncidentDomian
                 result.UpdateValueIfNoError(incident);
                 await _incidentRepository.UpdateIncidentAsync(incident);
             }
-                
+
             return result;
         }
 
@@ -212,8 +212,8 @@ namespace Dotnet.EventSourcing.Domain.IncidentDomian
             Result<Incident> result = Result<Incident>.Create();
 
             result
-                .AddErrorIf(() => incident == null, CreateUserNotExistsError(domainEvent.IncidentId))
-                .AddErrorIf(() => changedBy == null, CreateIncidentNotExistsError(domainEvent.ChangedByUserId))
+                .AddErrorIf(() => incident == null, CreateIncidentNotExistsError(domainEvent.IncidentId))
+                .AddErrorIf(() => changedBy == null, CreateUserNotExistsError(domainEvent.ChangedByUserId))
                 .AddErrorIf(() => incident != null && !incident.ValidateCanClose(), IncidentErrors.CannotCloseIncidentNotCompletedError);
 
             if (result.HasError)
@@ -237,8 +237,8 @@ namespace Dotnet.EventSourcing.Domain.IncidentDomian
             Result<Incident> result = Result<Incident>.Create();
 
             result
-                .AddErrorIf(() => incident == null, CreateUserNotExistsError(domainEvent.IncidentId))
-                .AddErrorIf(() => changedBy == null, CreateIncidentNotExistsError(domainEvent.ChangedByUserId))
+                .AddErrorIf(() => incident == null, CreateIncidentNotExistsError(domainEvent.IncidentId))
+                .AddErrorIf(() => changedBy == null, CreateUserNotExistsError(domainEvent.ChangedByUserId))
                 .AddErrorIf(() => incident != null && !incident.ValidateCanReOpen(), IncidentErrors.CannotReOpenIncidentNotCompletedError);
 
             if (result.HasError)
@@ -250,7 +250,7 @@ namespace Dotnet.EventSourcing.Domain.IncidentDomian
                 result.UpdateValueIfNoError(incident);
                 await _incidentRepository.UpdateIncidentAsync(incident);
             }
-            
+
             return result;
         }
     }

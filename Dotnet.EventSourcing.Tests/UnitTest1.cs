@@ -73,7 +73,7 @@ public class InMemoryDBTest
 
         var result = await userService.ProcessDomainEvent(new CreateUserEvent(DateTime.UtcNow, "Sam", "Modeste"));
 
-        foreach(IError error in result.ErrorDomainEvents)
+        foreach(IError error in result.DomianErrors)
         {
             Console.WriteLine(error.Message);
         }

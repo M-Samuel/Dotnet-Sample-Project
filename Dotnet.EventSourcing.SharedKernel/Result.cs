@@ -1,46 +1,46 @@
 ﻿using System;
 namespace Dotnet.EventSourcing.SharedKernel
 {
-	public class Result<DEvent> where DEvent : new()
+	public class Result<Entity> where Entity : new()
 	{
-		private Result(DEvent value)
+		private Result(Entity value)
 		{
-			Value = value;
+			EntityValue = value;
 		}
 
         private Result()
         {
-			Value = new();
+			EntityValue = new();
         }
 
-        public static Result<DEvent> Create(DEvent value)
+        public static Result<Entity> Create(Entity value)
 		{
-			return new Result<DEvent>(value);
+			return new Result<Entity>(value);
 		}
 
-        public static Result<DEvent> Create()
+        public static Result<Entity> Create()
         {
-            return new Result<DEvent>();
+            return new Result<Entity>();
         }
 
-        public DEvent Value { get; private set; }
+        public Entity EntityValue { get; private set; }
 
-		public DEvent GetValue() => Value;
+		public Entity GetValue() => EntityValue;
 
 
-		private readonly List<IError> _errors = new();
+		private readonly List<IError> _domainErrors = new();
 
-		public bool HasError => _errors.Count > 0;
+		public bool HasError => _domainErrors.Count > 0;
 
-		public List<IError> ErrorDomainEvents => _errors.ToList();
+		public List<IError> DomianErrors => _domainErrors.ToList();
 
-		public Result<DEvent> AddError(IError error)
+		public Result<Entity> AddError(IError error)
 		{
-            _errors.Add(error);
+            _domainErrors.Add(error);
 			return this;
 		}
 
-		public Result<DEvent> AddErrorIf(Func<bool> predicate, IError errorToBeAddIfTrue)
+		public Result<Entity> AddErrorIf(Func<bool> predicate, IError errorToBeAddIfTrue)
 		{
 			if (predicate())
 				AddError(errorToBeAddIfTrue);
@@ -48,10 +48,10 @@ namespace Dotnet.EventSourcing.SharedKernel
 			return this;
 		}
 
-		public void UpdateValueIfNoError(DEvent value)
+		public void UpdateValueIfNoError(Entity value)
 		{
 			if(!HasError)
-				Value = value;
+				EntityValue = value;
 		}
 
     }
