@@ -8,22 +8,22 @@ namespace Dotnet.EventSourcing.SharedKernel
 			EntityValue = value;
 		}
 
-        private Result()
-        {
+		private Result()
+		{
 			EntityValue = new();
-        }
+		}
 
-        public static Result<Entity> Create(Entity value)
+		public static Result<Entity> Create(Entity value)
 		{
 			return new Result<Entity>(value);
 		}
 
-        public static Result<Entity> Create()
-        {
-            return new Result<Entity>();
-        }
+		public static Result<Entity> Create()
+		{
+			return new Result<Entity>();
+		}
 
-        public Entity EntityValue { get; private set; }
+		public Entity EntityValue { get; private set; }
 
 		public Entity GetValue() => EntityValue;
 
@@ -36,7 +36,7 @@ namespace Dotnet.EventSourcing.SharedKernel
 
 		public Result<Entity> AddError(IError error)
 		{
-            _domainErrors.Add(error);
+			_domainErrors.Add(error);
 			return this;
 		}
 
@@ -50,10 +50,10 @@ namespace Dotnet.EventSourcing.SharedKernel
 
 		public void UpdateValueIfNoError(Entity value)
 		{
-			if(!HasError)
+			if (!HasError)
 				EntityValue = value;
 		}
 
-    }
+	}
 }
 

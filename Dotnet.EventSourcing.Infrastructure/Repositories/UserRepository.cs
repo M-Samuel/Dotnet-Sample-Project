@@ -30,7 +30,7 @@ namespace Dotnet.EventSourcing.Infrastructure.Repositories
             return await Task.FromResult(users.FirstOrDefault());
         }
 
-        private async Task<IEnumerable<UserDomain.User>> GetUsers(Func<IQueryable<UserDTO.User>,IQueryable<UserDTO.User>>? conditions)
+        private async Task<IEnumerable<UserDomain.User>> GetUsers(Func<IQueryable<UserDTO.User>, IQueryable<UserDTO.User>>? conditions)
         {
             IQueryable<UserDTO.User> query = _databaseContext.Users.AsQueryable();
             if (conditions != null)

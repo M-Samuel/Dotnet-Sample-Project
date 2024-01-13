@@ -15,7 +15,7 @@ public class InMemoryDBTest
 {
     private readonly DbContextOptions<DatabaseContext> _contextOptions;
 
-    
+
     public InMemoryDBTest()
     {
         _contextOptions = new DbContextOptionsBuilder<DatabaseContext>()
@@ -29,7 +29,7 @@ public class InMemoryDBTest
         context.Database.EnsureCreated();
 
         context.AddRange(
-            new Infrastructure.DTO.UserDTO.User() { FirstName = "Sam", LastName = "Modeste", Id = Guid.NewGuid()},
+            new Infrastructure.DTO.UserDTO.User() { FirstName = "Sam", LastName = "Modeste", Id = Guid.NewGuid() },
             new Infrastructure.DTO.UserDTO.User() { FirstName = "Jo", LastName = "Modeste", Id = Guid.NewGuid() }
             );
 
@@ -73,12 +73,12 @@ public class InMemoryDBTest
 
         var result = await userService.ProcessDomainEvent(new CreateUserEvent(DateTime.UtcNow, "Sam", "Modeste"));
 
-        foreach(IError error in result.DomianErrors)
+        foreach (IError error in result.DomianErrors)
         {
             Console.WriteLine(error.Message);
         }
         Assert.IsTrue(result.HasError);
-        
+
 
     }
 
