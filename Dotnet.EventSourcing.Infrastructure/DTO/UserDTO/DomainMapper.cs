@@ -11,7 +11,7 @@ namespace Dotnet.EventSourcing.Infrastructure.DTO.UserDTO
 				Id = user.Id,
 				FirstName = user.FullName?.FirstName ?? string.Empty,
 				LastName = user.FullName?.LastName ?? string.Empty
-            };
+			};
 			return userDTO;
 		}
 
@@ -23,7 +23,7 @@ namespace Dotnet.EventSourcing.Infrastructure.DTO.UserDTO
 				FullName = new(userDTO.FirstName, userDTO.LastName)
 			};
 			return user;
-        }
+		}
 	}
 }
 
