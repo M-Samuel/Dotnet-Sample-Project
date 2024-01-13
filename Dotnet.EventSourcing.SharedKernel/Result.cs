@@ -25,9 +25,6 @@ namespace Dotnet.EventSourcing.SharedKernel
 
 		public Entity EntityValue { get; private set; }
 
-		public Entity GetValue() => EntityValue;
-
-
 		private readonly List<IError> _domainErrors = new();
 
 		public bool HasError => _domainErrors.Count > 0;
@@ -42,16 +39,13 @@ namespace Dotnet.EventSourcing.SharedKernel
 
 		public Result<Entity> AddErrorIf(Func<bool> predicate, IError errorToBeAddIfTrue)
 		{
-			if (predicate())
-				AddError(errorToBeAddIfTrue);
-
+			if (predicate()) AddError(errorToBeAddIfTrue);
 			return this;
 		}
 
 		public void UpdateValueIfNoError(Entity value)
 		{
-			if (!HasError)
-				EntityValue = value;
+			if (!HasError) EntityValue = value;
 		}
 
 	}
