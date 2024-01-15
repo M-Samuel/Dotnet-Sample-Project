@@ -24,16 +24,16 @@ namespace Dotnet.EventSourcing.Domain.IncidentDomain
             new("Cannot acknowledge Incident as incident has no assignee");
     }
 
-	public record CannotAcknowledgeIncidentNotOpenedError(string Message) : IError;
-    public record CannotInProgressIncidentNotAcknowledgeError(string Message) : IError;
-    public record CannotInProgressIncidentNotStandByError(string Message) : IError;
-    public record CannotStandByIncidentNotInProgressError(string Message) : IError;
-    public record CannotCompleteIncidentNotInProgressError(string Message) : IError;
-    public record CannotCloseIncidentNotCompletedError(string Message) : IError;
-    public record CannotReOpenIncidentNotCompletedError(string Message) : IError;
-    public record CannotAcknowledgeAsNoAssigneeError(string Message) : IError;
+	public record CannotAcknowledgeIncidentNotOpenedError(string Message, string ErrorName = nameof(CannotAcknowledgeIncidentNotOpenedError)) : IError;
+    public record CannotInProgressIncidentNotAcknowledgeError(string Message, string ErrorName = nameof(CannotInProgressIncidentNotAcknowledgeError)) : IError;
+    public record CannotInProgressIncidentNotStandByError(string Message, string ErrorName = nameof(CannotInProgressIncidentNotStandByError)) : IError;
+    public record CannotStandByIncidentNotInProgressError(string Message, string ErrorName = nameof(CannotStandByIncidentNotInProgressError)) : IError;
+    public record CannotCompleteIncidentNotInProgressError(string Message, string ErrorName = nameof(CannotCompleteIncidentNotInProgressError)) : IError;
+    public record CannotCloseIncidentNotCompletedError(string Message, string ErrorName = nameof(CannotCloseIncidentNotCompletedError)) : IError;
+    public record CannotReOpenIncidentNotCompletedError(string Message, string ErrorName = nameof(CannotReOpenIncidentNotCompletedError)) : IError;
+    public record CannotAcknowledgeAsNoAssigneeError(string Message, string ErrorName = nameof(CannotAcknowledgeAsNoAssigneeError)) : IError;
 
-    public record UserNotFoundError(string Message) : IError;
-    public record IncidentNotFoundError(string Message) : IError;
+    public record UserNotFoundError(string Message, string ErrorName = nameof(UserNotFoundError)) : IError;
+    public record IncidentNotFoundError(string Message, string ErrorName = nameof(IncidentNotFoundError)) : IError;
 }
 

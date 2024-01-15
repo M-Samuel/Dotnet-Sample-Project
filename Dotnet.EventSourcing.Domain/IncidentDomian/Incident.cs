@@ -17,7 +17,17 @@ namespace Dotnet.EventSourcing.Domain.IncidentDomain
 
         public void UpdateStatus(IncidentStatus newStatus, User changedBy)
         {
-            IncidentStatusChanges.Add(new IncidentStatusChange(Guid.NewGuid(), changedBy, Status, newStatus, DateTime.UtcNow));
+            IncidentStatusChange incidentStatusChange = new()
+            {
+                ChangedBy = changedBy,
+                ChangedDateTime = DateTime.UtcNow,
+                Id = Guid.NewGuid(),
+                NewStatus = newStatus,
+                OldStatus = Status
+            };
+
+            IncidentStatusChanges.Add(incidentStatusChange);
+
             Status = newStatus;
         }
 
