@@ -7,6 +7,7 @@ namespace Dotnet.EventSourcing.Infrastructure.DTO.IncidentDTO
 {
     public class IncidentStatusChange
     {
+        [Key]
         public Guid Id { get; set; }
         public User? ChangedBy { get; set; }
         public IncidentStatus OldStatus { get; set; }
