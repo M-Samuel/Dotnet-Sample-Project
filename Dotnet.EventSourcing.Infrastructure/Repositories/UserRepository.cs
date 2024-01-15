@@ -27,25 +27,25 @@ namespace Dotnet.EventSourcing.Infrastructure.Repositories
 
         public async Task<UserDomain.User?> GetUserByIdAsync(Guid userId)
         {
-            var dtoUser = await _databaseContext.Users
+            var user = await _databaseContext.Users
                 .AsQueryable()
                 .SingleOrDefaultAsync(u => u.Id == userId);
 
-            if(dtoUser == null) return null;
+            if(user == null) return null;
 
-            return dtoUser.ToDomain();
+            return user;
         }
 
         public async Task<UserDomain.User?> GetUserByNameAsync(string firstName, string lastName)
         {
 
-            var dtoUser = await _databaseContext.Users
+            var user = await _databaseContext.Users
                 .AsQueryable()
                 .SingleOrDefaultAsync(user => user.FirstName == firstName && user.LastName == lastName);
 
-            if(dtoUser == null) return null;
+            if(user == null) return null;
 
-            return dtoUser.ToDomain();
+            return user;
         }
     }
 }

@@ -3,7 +3,6 @@ using Dotnet.EventSourcing.Domain.IncidentDomain.IncidentDomainEvents;
 using Dotnet.EventSourcing.Domain.UserDomain;
 using Dotnet.EventSourcing.Domain.UserDomain.UserDomainEvents;
 using Dotnet.EventSourcing.Infrastructure.Contexts;
-using Dotnet.EventSourcing.Infrastructure.DTO.UserDTO;
 using Dotnet.EventSourcing.Infrastructure.Repositories;
 using Dotnet.EventSourcing.SharedKernel;
 using Microsoft.EntityFrameworkCore;
@@ -16,9 +15,9 @@ namespace Dotnet.EventSourcing.Tests;
 public class InMemoryDBTest
 {
     private readonly DbContextOptions<DatabaseContext> _contextOptions;
-    private readonly Infrastructure.DTO.UserDTO.User[] _users = new Infrastructure.DTO.UserDTO.User[]{
-        new Infrastructure.DTO.UserDTO.User() { FirstName = "Sam", LastName = "Modeste", Id = Guid.NewGuid() },
-        new Infrastructure.DTO.UserDTO.User() { FirstName = "Jo", LastName = "Modeste", Id = Guid.NewGuid() }
+    private readonly User[] _users = new User[]{
+        new User() { FirstName = "Sam", LastName = "Modeste", Id = Guid.NewGuid() },
+        new User() { FirstName = "Jo", LastName = "Modeste", Id = Guid.NewGuid() }
     };
 
     public InMemoryDBTest()
@@ -59,7 +58,7 @@ public class InMemoryDBTest
         using var context = new DatabaseContext(_contextOptions);
         UserRepository userRepository = new UserRepository(context);
 
-        await userRepository.CreateUserAsync(new Domain.UserDomain.User() { FullName = new Domain.UserDomain.FullName("Kevin", "Modeste"), Id = Guid.NewGuid() });
+        await userRepository.CreateUserAsync(new Domain.UserDomain.User() { FirstName = "Kevin", LastName = "Modeste", Id = Guid.NewGuid() });
 
         context.SaveChanges();
 

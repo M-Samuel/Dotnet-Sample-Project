@@ -7,14 +7,17 @@ namespace Dotnet.EventSourcing.Domain.UserDomain
     {
         public Guid Id { get; set; }
 
-        public FullName? FullName { get; set; }
+        public string? FirstName { get; set; }
 
-        public static User Create(FullName fullName)
+        public string? LastName { get; set; }
+
+        public static User Create(string firstName, string lastName)
         {
             User newUser = new()
             {
                 Id = Guid.NewGuid(),
-                FullName = fullName
+                FirstName = firstName,
+                LastName = lastName
             };
             return newUser;
         }

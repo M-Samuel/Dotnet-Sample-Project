@@ -1,5 +1,5 @@
 ﻿using System;
-using Dotnet.EventSourcing.Infrastructure.DTO.IncidentDTO;
+using Dotnet.EventSourcing.Domain.IncidentDomain;
 using Microsoft.EntityFrameworkCore;
 namespace Dotnet.EventSourcing.Infrastructure.Contexts
 {

@@ -22,14 +22,14 @@ namespace Dotnet.EventSourcing.Domain.UserDomain
 
             Result<User> result = Result<User>.Create();
             result
-                .AddErrorIf(() => duplicateUser != null, new UserAlreadyExistsError($"Cannot create user, {duplicateUser?.FullName?.FirstName}, {duplicateUser?.FullName?.LastName} already exists"))
+                .AddErrorIf(() => duplicateUser != null, new UserAlreadyExistsError($"Cannot create user, {duplicateUser?.FirstName}, {duplicateUser?.LastName} already exists"))
                 .AddErrorIf(() => string.IsNullOrWhiteSpace(createUserEvent.FirstName), new UserFirstNameEmptyError("FirstName cannot be null"))
                 .AddErrorIf(() => string.IsNullOrWhiteSpace(createUserEvent.LastName), new UserLastNameEmptyError("LastName cannot be null"));
 
             if (result.HasError)
                 return result;
 
-            User user = User.Create(new FullName(createUserEvent.FirstName, createUserEvent.LastName));
+            User user = User.Create(createUserEvent.FirstName, createUserEvent.LastName);
             await _userRepository.CreateUserAsync(user);
             result.UpdateValueIfNoError(user);
 

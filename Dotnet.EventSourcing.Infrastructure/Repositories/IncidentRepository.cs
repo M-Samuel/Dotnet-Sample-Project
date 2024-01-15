@@ -18,8 +18,7 @@ namespace Dotnet.EventSourcing.Infrastructure.Repositories
 
         public async Task CreateIncidentAsync(Domain.IncidentDomain.Incident domainIncident)
         {
-            var dtoIncident = domainIncident.ToDTO();
-            await _databaseContext.Incidents.AddAsync(dtoIncident);
+            await _databaseContext.Incidents.AddAsync(domainIncident);
         }
 
         public async Task<Domain.IncidentDomain.Incident?> GetIncidentByIdAsync(Guid incidentId)

@@ -9,8 +9,8 @@ namespace Dotnet.EventSourcing.Infrastructure.DTO.UserDTO
 			User userDTO = new()
 			{
 				Id = user.Id,
-				FirstName = user.FullName?.FirstName ?? string.Empty,
-				LastName = user.FullName?.LastName ?? string.Empty
+				FirstName = user.FirstName ?? string.Empty,
+				LastName = user.LastName ?? string.Empty
 			};
 			return userDTO;
 		}
@@ -20,7 +20,8 @@ namespace Dotnet.EventSourcing.Infrastructure.DTO.UserDTO
 			UserDomain.User user = new()
 			{
 				Id = userDTO.Id,
-				FullName = new(userDTO.FirstName, userDTO.LastName)
+				FirstName = userDTO.FirstName,
+				LastName = userDTO.LastName
 			};
 			return user;
 		}
