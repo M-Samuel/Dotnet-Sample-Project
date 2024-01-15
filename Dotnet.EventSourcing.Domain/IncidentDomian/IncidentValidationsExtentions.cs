@@ -1,7 +1,6 @@
 ﻿using System;
-using Dotnet.EventSourcing.Domain.IncidentDomain;
 
-namespace Dotnet.EventSourcing.Domain.IncidentDomian
+namespace Dotnet.EventSourcing.Domain.IncidentDomain
 {
 	public static class IncidentValidationsExtentions
     {

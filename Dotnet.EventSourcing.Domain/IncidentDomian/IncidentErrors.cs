@@ -2,7 +2,7 @@
 using Dotnet.EventSourcing.Domain.IncidentDomain;
 using Dotnet.EventSourcing.SharedKernel;
 
-namespace Dotnet.EventSourcing.Domain.IncidentDomian
+namespace Dotnet.EventSourcing.Domain.IncidentDomain
 {
 	public static class IncidentErrors
 	{

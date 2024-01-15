@@ -1,11 +1,11 @@
-﻿using System;
+using System;
+using System.ComponentModel.DataAnnotations;
 using Dotnet.EventSourcing.Domain.IncidentDomain;
-using Dotnet.EventSourcing.Domain.UserDomain;
-using Dotnet.EventSourcing.SharedKernel;
+using Dotnet.EventSourcing.Infrastructure.DTO.UserDTO;
 
-namespace Dotnet.EventSourcing.Domain.IncidentDomain
+namespace Dotnet.EventSourcing.Infrastructure.DTO.IncidentDTO
 {
-    public class IncidentStatusChange : IEntity
+    public class IncidentStatusChange
     {
         public Guid Id { get; set; }
         public User? ChangedBy { get; set; }
@@ -13,6 +13,5 @@ namespace Dotnet.EventSourcing.Domain.IncidentDomain
         public IncidentStatus NewStatus { get; set; }
         public DateTime ChangedDateTime { get; set; }
     }
-	
-}
 
+}

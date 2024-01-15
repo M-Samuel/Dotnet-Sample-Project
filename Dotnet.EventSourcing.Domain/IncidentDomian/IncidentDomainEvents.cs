@@ -2,7 +2,7 @@
 using Dotnet.EventSourcing.Domain.IncidentDomain;
 using Dotnet.EventSourcing.SharedKernel;
 
-namespace Dotnet.EventSourcing.Domain.IncidentDomian.IncidentDomainEvents
+namespace Dotnet.EventSourcing.Domain.IncidentDomain.IncidentDomainEvents
 {
 
     public record OpenIncidentEvent(DateTime OccurranceDateTime, Guid CustomerId, IncidentDetails IncidentDetails) : IDomainEvent;

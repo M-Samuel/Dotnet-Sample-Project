@@ -1,6 +1,4 @@
 ﻿using System;
-using Dotnet.EventSourcing.Domain.IncidentDomian;
-using Dotnet.EventSourcing.Domain.IncidentDomian.IncidentDomainEvents;
 using Dotnet.EventSourcing.Domain.UserDomain;
 using Dotnet.EventSourcing.SharedKernel;
 

@@ -1,9 +1,8 @@
 ﻿using System;
-using Dotnet.EventSourcing.Domain.IncidentDomain;
-using Dotnet.EventSourcing.Domain.IncidentDomian.IncidentDomainEvents;
+using Dotnet.EventSourcing.Domain.IncidentDomain.IncidentDomainEvents;
 using Dotnet.EventSourcing.SharedKernel;
 
-namespace Dotnet.EventSourcing.Domain.IncidentDomian
+namespace Dotnet.EventSourcing.Domain.IncidentDomain
 {
 	public interface IIncidentService
 	{
