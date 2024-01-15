@@ -6,7 +6,7 @@ namespace Dotnet.EventSourcing.Infrastructure.Contexts
 {
     public interface IUserEntities
     {
-        public DbSet<User> Users { get; set; }
+        DbSet<User> Users { get; set; }
     }
 }
 

@@ -1,4 +1,6 @@
-﻿using Dotnet.EventSourcing.Domain.UserDomain;
+﻿using Dotnet.EventSourcing.Domain.IncidentDomain;
+using Dotnet.EventSourcing.Domain.IncidentDomain.IncidentDomainEvents;
+using Dotnet.EventSourcing.Domain.UserDomain;
 using Dotnet.EventSourcing.Domain.UserDomain.UserDomainEvents;
 using Dotnet.EventSourcing.Infrastructure.Contexts;
 using Dotnet.EventSourcing.Infrastructure.DTO.UserDTO;
@@ -14,7 +16,10 @@ namespace Dotnet.EventSourcing.Tests;
 public class InMemoryDBTest
 {
     private readonly DbContextOptions<DatabaseContext> _contextOptions;
-
+    private readonly Infrastructure.DTO.UserDTO.User[] _users = new Infrastructure.DTO.UserDTO.User[]{
+        new Infrastructure.DTO.UserDTO.User() { FirstName = "Sam", LastName = "Modeste", Id = Guid.NewGuid() },
+        new Infrastructure.DTO.UserDTO.User() { FirstName = "Jo", LastName = "Modeste", Id = Guid.NewGuid() }
+    };
 
     public InMemoryDBTest()
     {
@@ -23,17 +28,18 @@ public class InMemoryDBTest
             .ConfigureWarnings(b => b.Ignore(InMemoryEventId.TransactionIgnoredWarning))
             .Options;
 
-        using var context = new DatabaseContext(_contextOptions);
 
-        context.Database.EnsureDeleted();
-        context.Database.EnsureCreated();
+        
 
-        context.AddRange(
-            new Infrastructure.DTO.UserDTO.User() { FirstName = "Sam", LastName = "Modeste", Id = Guid.NewGuid() },
-            new Infrastructure.DTO.UserDTO.User() { FirstName = "Jo", LastName = "Modeste", Id = Guid.NewGuid() }
-            );
+        using (var context = new DatabaseContext(_contextOptions))
+        {
+            context.Database.EnsureDeleted();
+            context.Database.EnsureCreated();
+            context.AddRange(_users);
+            context.SaveChanges();
+        }
 
-        context.SaveChanges();
+        
     }
 
     [TestMethod]
@@ -81,6 +87,26 @@ public class InMemoryDBTest
 
 
     }
+
+    [TestMethod]
+    public async Task CreateIncident()
+    {
+        using (var context = new DatabaseContext(_contextOptions))
+        {
+            var incidentService = new IncidentService(new IncidentRepository(context), new UserRepository(context));
+
+            OpenIncidentEvent openIncidentEvent = new(
+                DateTime.UtcNow,
+                _users[0].Id,
+                new Domain.IncidentDomain.IncidentDetails("Database not responding", "Slow response time on database level")
+            );
+
+            var result = await incidentService.ProcessDomainEvent(openIncidentEvent);
+
+            Assert.IsFalse(result.HasError);
+        }
+    }
+
 
 
 }

@@ -6,6 +6,7 @@ using UserDTO = Dotnet.EventSourcing.Infrastructure.DTO.UserDTO;
 using UserDomain = Dotnet.EventSourcing.Domain.UserDomain;
 using Dotnet.EventSourcing.Infrastructure.DTO.UserDTO;
 using Dotnet.EventSourcing.SharedKernel;
+using Microsoft.EntityFrameworkCore;
 
 namespace Dotnet.EventSourcing.Infrastructure.Repositories
 {
@@ -26,30 +27,25 @@ namespace Dotnet.EventSourcing.Infrastructure.Repositories
 
         public async Task<UserDomain.User?> GetUserByIdAsync(Guid userId)
         {
-            var users = await GetUsers((query) => query.Where(user => user.Id == userId));
-            return await Task.FromResult(users.FirstOrDefault());
-        }
+            var dtoUser = await _databaseContext.Users
+                .AsQueryable()
+                .SingleOrDefaultAsync(u => u.Id == userId);
 
-        private async Task<IEnumerable<UserDomain.User>> GetUsers(Func<IQueryable<UserDTO.User>, IQueryable<UserDTO.User>>? conditions)
-        {
-            IQueryable<UserDTO.User> query = _databaseContext.Users.AsQueryable();
-            if (conditions != null)
-                query = conditions(query);
+            if(dtoUser == null) return null;
 
-            IEnumerable<UserDomain.User> users =
-                query
-                .Select(userDTO => userDTO.ToDomain())
-                .AsEnumerable();
-
-            return await Task.FromResult(users);
+            return dtoUser.ToDomain();
         }
 
         public async Task<UserDomain.User?> GetUserByNameAsync(string firstName, string lastName)
         {
-            var users = await GetUsers((query) =>
-                                query.Where(user => user.FirstName == firstName && user.LastName == lastName));
 
-            return await Task.FromResult(users.FirstOrDefault());
+            var dtoUser = await _databaseContext.Users
+                .AsQueryable()
+                .SingleOrDefaultAsync(user => user.FirstName == firstName && user.LastName == lastName);
+
+            if(dtoUser == null) return null;
+
+            return dtoUser.ToDomain();
         }
     }
 }
