@@ -31,7 +31,7 @@ namespace Dotnet.EventSourcing.Domain.IncidentDomain
                 resultError.AddError(new UserNotFoundError($"User with id does not exists {domainEvent.CustomerId}"));
                 return resultError;
             }
-            Incident createdIncident = Incident.CreateNew(domainEvent.OccurranceDateTime, customer, domainEvent.IncidentDetails);
+            Incident createdIncident = Incident.CreateNew(domainEvent.OccurranceDateTime, customer, domainEvent.Title, domainEvent.Description);
             createdIncident.UpdateStatus(IncidentStatus.Opened, customer);
             await _incidentRepository.CreateIncidentAsync(createdIncident);
             Result<Incident> result = Result<Incident>.Create(createdIncident);

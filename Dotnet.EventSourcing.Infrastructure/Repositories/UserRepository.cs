@@ -2,9 +2,7 @@
 using System.Linq;
 using Dotnet.EventSourcing.Domain.UserDomain;
 using Dotnet.EventSourcing.Infrastructure.Contexts;
-using UserDTO = Dotnet.EventSourcing.Infrastructure.DTO.UserDTO;
 using UserDomain = Dotnet.EventSourcing.Domain.UserDomain;
-using Dotnet.EventSourcing.Infrastructure.DTO.UserDTO;
 using Dotnet.EventSourcing.SharedKernel;
 using Microsoft.EntityFrameworkCore;
 
@@ -21,8 +19,7 @@ namespace Dotnet.EventSourcing.Infrastructure.Repositories
 
         public async Task CreateUserAsync(UserDomain.User user)
         {
-            UserDTO.User userDTO = user.ToDTO();
-            await _databaseContext.AddAsync(userDTO);
+            await _databaseContext.AddAsync(user);
         }
 
         public async Task<UserDomain.User?> GetUserByIdAsync(Guid userId)

@@ -4,7 +4,7 @@ using Dotnet.EventSourcing.SharedKernel;
 
 namespace Dotnet.EventSourcing.Domain.IncidentDomain
 {
-    public class Incident : IEntity
+    public partial class Incident : IEntity
     {
 
         public Guid Id { get; set; }
@@ -12,8 +12,9 @@ namespace Dotnet.EventSourcing.Domain.IncidentDomain
         public User? Customer { get; set; }
         public User? Assignee { get; set; }
         public IncidentStatus Status { get; set; }
-        public IncidentDetails? IncidentDetails { get; set; }
-        public List<IncidentStatusChange> IncidentStatusChanges { get; set; } = new();
+        public string? Title { get; set; }
+        public string? Description { get; set; }
+        //public List<IncidentStatusChange> IncidentStatusChanges { get; set; } = new();
 
         public void UpdateStatus(IncidentStatus newStatus, User changedBy)
         {
@@ -26,7 +27,7 @@ namespace Dotnet.EventSourcing.Domain.IncidentDomain
                 OldStatus = Status
             };
 
-            IncidentStatusChanges.Add(incidentStatusChange);
+            //IncidentStatusChanges.Add(incidentStatusChange);
 
             Status = newStatus;
         }
@@ -36,20 +37,20 @@ namespace Dotnet.EventSourcing.Domain.IncidentDomain
             Assignee = assignee;
         }
 
-        public static Incident CreateNew(DateTime createdDate, User customer, IncidentDetails details)
+        public static Incident CreateNew(DateTime createdDate, User customer, string title, string description)
 		{
             Incident incident = new()
             {
                 Id = Guid.NewGuid(),
                 CreatedDate = createdDate,
                 Customer = customer,
-                IncidentDetails = details
+                Title = title,
+                Description = description
             };
             return incident;
 		}
 	}
 
-    public record IncidentDetails(string Title, string Description);
 
 
     public enum IncidentStatus

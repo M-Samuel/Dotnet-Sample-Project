@@ -5,7 +5,7 @@ using Dotnet.EventSourcing.SharedKernel;
 namespace Dotnet.EventSourcing.Domain.IncidentDomain.IncidentDomainEvents
 {
 
-    public record OpenIncidentEvent(DateTime OccurranceDateTime, Guid CustomerId, IncidentDetails IncidentDetails) : IDomainEvent;
+    public record OpenIncidentEvent(DateTime OccurranceDateTime, Guid CustomerId, string Title, string Description) : IDomainEvent;
     public record AcknowledgeIncidentEvent(DateTime OccurranceDateTime, Guid IncidentId, Guid ChangedByUserId) : IDomainEvent;
     public record MoveIncidentToInProgressEvent(DateTime OccurranceDateTime, Guid IncidentId, Guid ChangedByUserId) : IDomainEvent;
     public record ResumeIncidentEvent(DateTime OccurranceDateTime, Guid IncidentId, Guid ChangedByUserId) : IDomainEvent;

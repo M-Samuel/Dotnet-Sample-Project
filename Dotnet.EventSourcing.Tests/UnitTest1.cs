@@ -97,7 +97,8 @@ public class InMemoryDBTest
             OpenIncidentEvent openIncidentEvent = new(
                 DateTime.UtcNow,
                 _users[0].Id,
-                new Domain.IncidentDomain.IncidentDetails("Database not responding", "Slow response time on database level")
+                "Database not responding", 
+                "Slow response time on database level"
             );
 
             var result = await incidentService.ProcessDomainEvent(openIncidentEvent);
