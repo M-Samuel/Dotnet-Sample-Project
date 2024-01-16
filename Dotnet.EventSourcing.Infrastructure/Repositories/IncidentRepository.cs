@@ -17,8 +17,8 @@ namespace Dotnet.EventSourcing.Infrastructure.Repositories
 
         public async Task CreateIncidentAsync(Domain.IncidentDomain.Incident domainIncident)
         {
-            // await _databaseContext.Incidents.AddAsync(domainIncident);
-            throw new NotImplementedException();
+            await _databaseContext.Incidents.AddAsync(domainIncident);
+            //throw new NotImplementedException();
         }
 
         public async Task<Domain.IncidentDomain.Incident?> GetIncidentByIdAsync(Guid incidentId)

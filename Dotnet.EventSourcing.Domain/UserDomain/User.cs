@@ -3,7 +3,7 @@ using Dotnet.EventSourcing.SharedKernel;
 
 namespace Dotnet.EventSourcing.Domain.UserDomain
 {
-    public class User : IEntity
+    public partial class User : IEntity
     {
         public Guid Id { get; set; }
 
