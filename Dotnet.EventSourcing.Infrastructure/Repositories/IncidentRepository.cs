@@ -2,6 +2,7 @@
 
 using Dotnet.EventSourcing.Domain.IncidentDomain;
 using Dotnet.EventSourcing.Infrastructure.Contexts;
+using Microsoft.EntityFrameworkCore;
 
 namespace Dotnet.EventSourcing.Infrastructure.Repositories
 {
@@ -15,20 +16,22 @@ namespace Dotnet.EventSourcing.Infrastructure.Repositories
         }
 
 
-        public async Task CreateIncidentAsync(Domain.IncidentDomain.Incident domainIncident)
+        public async Task CreateIncidentAsync(Incident incident)
         {
-            await _databaseContext.Incidents.AddAsync(domainIncident);
-            //throw new NotImplementedException();
+            await _databaseContext.Incidents.AddAsync(incident);
         }
 
-        public async Task<Domain.IncidentDomain.Incident?> GetIncidentByIdAsync(Guid incidentId)
+        public async Task<Incident?> GetIncidentByIdAsync(Guid incidentId)
         {
-            throw new NotImplementedException();
+            return await _databaseContext.Incidents
+            .AsQueryable()
+            .SingleOrDefaultAsync(incident => incident.Id == incidentId);
         }
 
-        public async Task UpdateIncidentAsync(Domain.IncidentDomain.Incident incident)
+        public async Task UpdateIncidentAsync(Incident incident)
         {
-            throw new NotImplementedException();
+            _databaseContext.Incidents.Update(incident);
+            await Task.CompletedTask;
         }
     }
 }

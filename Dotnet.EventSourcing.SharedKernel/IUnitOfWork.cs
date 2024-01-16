@@ -1,9 +1,9 @@
 ﻿using System;
 namespace Dotnet.EventSourcing.SharedKernel
 {
-	public interface IUnitOfWork
+	public interface IUnitOfWork : IDisposable
 	{
-		Task CommitChangesAsync();
+		Task SaveChangesAsync();
 	}
 }
 

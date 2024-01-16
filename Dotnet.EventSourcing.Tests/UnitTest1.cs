@@ -103,6 +103,9 @@ public class InMemoryDBTest
 
             var result = await incidentService.ProcessDomainEvent(openIncidentEvent);
 
+            IUnitOfWork unitOfWork = context;
+            await unitOfWork.SaveChangesAsync();
+            unitOfWork.Dispose();
             Assert.IsFalse(result.HasError);
         }
     }
