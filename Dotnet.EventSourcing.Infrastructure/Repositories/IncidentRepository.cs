@@ -18,7 +18,8 @@ namespace Dotnet.EventSourcing.Infrastructure.Repositories
 
         public async Task CreateIncidentAsync(Incident incident)
         {
-            await _databaseContext.Incidents.AddAsync(incident);
+            await _databaseContext.AddAsync(incident);
+            await _databaseContext.SaveChangesAsync();
         }
 
         public async Task<Incident?> GetIncidentByIdAsync(Guid incidentId)
@@ -30,7 +31,7 @@ namespace Dotnet.EventSourcing.Infrastructure.Repositories
 
         public async Task UpdateIncidentAsync(Incident incident)
         {
-            _databaseContext.Incidents.Update(incident);
+            _databaseContext.Update(incident);
             await Task.CompletedTask;
         }
     }

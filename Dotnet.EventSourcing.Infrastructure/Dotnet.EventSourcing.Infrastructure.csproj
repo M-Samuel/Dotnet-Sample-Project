@@ -8,16 +8,13 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="7.0.14" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="7.0.11" />
   </ItemGroup>
   <ItemGroup>
-    <None Remove="DTO\" />
-    <None Remove="DTO\UserDTO\" />
     <None Remove="Repositories\" />
     <None Remove="Contexts\" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="DTO\" />
-    <Folder Include="DTO\UserDTO\" />
     <Folder Include="Repositories\" />
     <Folder Include="Contexts\" />
   </ItemGroup>
