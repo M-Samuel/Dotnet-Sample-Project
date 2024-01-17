@@ -20,8 +20,11 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Dotnet.EventSourcing.Domain\Dotnet.EventSourcing.Domain.csproj" />
-    <ProjectReference Include="..\Dotnet.EventSourcing.Infrastructure\Dotnet.EventSourcing.Infrastructure.csproj" />
     <ProjectReference Include="..\Dotnet.EventSourcing.SharedKernel\Dotnet.EventSourcing.SharedKernel.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="UserDomain/" />
   </ItemGroup>
 
 </Project>
