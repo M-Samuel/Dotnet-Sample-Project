@@ -29,7 +29,7 @@ namespace Dotnet.EventSourcing.SharedKernel
 
 		public bool HasError => _domainErrors.Count > 0;
 
-		public List<IError> DomianErrors => _domainErrors.ToList();
+		public List<IError> DomainErrors => _domainErrors.ToList();
 
 		public Result<Entity> AddError(IError error)
 		{

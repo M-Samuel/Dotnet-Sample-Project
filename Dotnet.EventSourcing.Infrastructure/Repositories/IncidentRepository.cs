@@ -19,7 +19,6 @@ namespace Dotnet.EventSourcing.Infrastructure.Repositories
         public async Task CreateIncidentAsync(Incident incident)
         {
             await _databaseContext.AddAsync(incident);
-            await _databaseContext.SaveChangesAsync();
         }
 
         public async Task<Incident?> GetIncidentByIdAsync(Guid incidentId)

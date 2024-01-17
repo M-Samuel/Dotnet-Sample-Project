@@ -15,6 +15,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dotnet.EventSourcing.Api", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dotnet.EventSourcing.Tests", "Dotnet.EventSourcing.Tests\Dotnet.EventSourcing.Tests.csproj", "{AA7E3F7F-D8DD-40AB-BC09-EFA6DD19DF78}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dotnet.EventSourcing.DomainTests", "Dotnet.EventSourcing.DomainTests\Dotnet.EventSourcing.DomainTests.csproj", "{4D2C638C-00F7-4887-9577-7F0E4CED12D8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +47,10 @@ Global
 		{AA7E3F7F-D8DD-40AB-BC09-EFA6DD19DF78}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AA7E3F7F-D8DD-40AB-BC09-EFA6DD19DF78}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AA7E3F7F-D8DD-40AB-BC09-EFA6DD19DF78}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4D2C638C-00F7-4887-9577-7F0E4CED12D8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4D2C638C-00F7-4887-9577-7F0E4CED12D8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4D2C638C-00F7-4887-9577-7F0E4CED12D8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4D2C638C-00F7-4887-9577-7F0E4CED12D8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
