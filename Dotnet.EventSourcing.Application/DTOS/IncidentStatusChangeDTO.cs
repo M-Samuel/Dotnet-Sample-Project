@@ -12,8 +12,8 @@ namespace Dotnet.EventSourcing.Application.DTOS
     {
         public Guid Id { get; set; }
         public UserDTO? ChangedBy { get; set; }
-        public IncidentStatus OldStatus { get; set; }
-        public IncidentStatus NewStatus { get; set; }
+        public string? OldStatus { get; set; }
+        public string? NewStatus { get; set; }
         public DateTime ChangedDateTime { get; set; }
     }
 }

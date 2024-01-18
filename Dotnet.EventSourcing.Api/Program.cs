@@ -20,8 +20,8 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<DatabaseContext>(
     options => options
             .UseLoggerFactory(LoggerFactory.Create(builder => builder.AddConsole().AddDebug()))
-            .UseSqlServer(@"Server=(localdb)\mssqllocaldb;Database=Test")
-            //.UseInMemoryDatabase("IncidentTest")
+            //.UseSqlServer(@"Server=(localdb)\mssqllocaldb;Database=Test")
+            .UseInMemoryDatabase("IncidentTest")
             .EnableDetailedErrors()
             .ConfigureWarnings(b => b.Ignore(InMemoryEventId.TransactionIgnoredWarning))
 );
@@ -59,7 +59,8 @@ if (app.Environment.IsDevelopment())
         using (var scope = serviceScopeFactory.CreateScope())
         using (var context = scope.ServiceProvider.GetRequiredService<DatabaseContext>())
         {
-            context.Database.Migrate();
+            if (context.Database.ProviderName != "Microsoft.EntityFrameworkCore.InMemory")
+                context.Database.Migrate();
         }
     }
 }

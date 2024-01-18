@@ -28,8 +28,10 @@ namespace Dotnet.EventSourcing.Infrastructure.Contexts
         public void UserBuilder(EntityTypeBuilder<User> builder)
         {
             builder.HasKey(u => u.Id);
-            builder.Property(u => u.FirstName);
-            builder.Property(u => u.LastName);
+            builder.Property(u => u.FirstName)
+                .HasMaxLength(100);
+            builder.Property(u => u.LastName)
+                .HasMaxLength(100);
         }
 
         public void IncidentBuilder(EntityTypeBuilder<Incident> builder)
@@ -46,10 +48,17 @@ namespace Dotnet.EventSourcing.Infrastructure.Contexts
             .HasForeignKey(i => i.CustomerId);
 
 
-            builder.Property(i => i.Status);
+            builder.Property(i => i.Status)
+                .HasConversion(
+                    v => v.ToString(),
+                    v => (IncidentStatus)Enum.Parse(typeof(IncidentStatus), v)
+                 )
+                .HasMaxLength(50);
+
             builder.Property(i => i.CreatedDate);
             builder.Property(i => i.Description);
-            builder.Property(i => i.Title);
+            builder.Property(i => i.Title)
+                .HasMaxLength(1000);
         }
 
         public void IncidentStatusChangeBuilder(EntityTypeBuilder<IncidentStatusChange> builder)
@@ -66,8 +75,18 @@ namespace Dotnet.EventSourcing.Infrastructure.Contexts
             .HasForeignKey(isc => isc.ChangedByUserId);
 
 
-            builder.Property(isc => isc.NewStatus);
-            builder.Property(isc => isc.OldStatus);
+            builder.Property(isc => isc.NewStatus)
+                .HasConversion(
+                    v => v.ToString(),
+                    v => (IncidentStatus)Enum.Parse(typeof(IncidentStatus), v)
+                )
+                .HasMaxLength(50);
+            builder.Property(isc => isc.OldStatus)
+                .HasConversion(
+                    v => v.ToString(),
+                    v => (IncidentStatus)Enum.Parse(typeof(IncidentStatus), v)
+                )
+                .HasMaxLength(50);
             builder.Property(isc => isc.ChangedDateTime);
         }
 

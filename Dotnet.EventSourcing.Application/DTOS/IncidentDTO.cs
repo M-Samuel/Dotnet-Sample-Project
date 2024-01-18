@@ -14,7 +14,7 @@ namespace Dotnet.EventSourcing.Application.DTOS
         public DateTime CreatedDate { get; set; }
         public UserDTO? Customer { get; set; }
         public UserDTO? Assignee { get; set; }
-        public IncidentStatus Status { get; set; }
+        public string? Status { get; set; }
         public string? Title { get; set; }
         public string? Description { get; set; }
         public List<IncidentStatusChangeDTO> IncidentStatusChanges { get; set; } = new();

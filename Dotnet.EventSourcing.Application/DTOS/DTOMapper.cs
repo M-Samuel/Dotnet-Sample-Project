@@ -30,7 +30,7 @@ namespace Dotnet.EventSourcing.Application.DTOS
                 Description = incident.Description,
                 Id = incident.Id,
                 IncidentStatusChanges = incident.IncidentStatusChanges.Select(isc => isc.ToDTO()).ToList(),
-                Status = incident.Status,
+                Status = incident.Status.ToString(),
                 Title = incident.Title
             };
         }
@@ -42,8 +42,8 @@ namespace Dotnet.EventSourcing.Application.DTOS
                 ChangedBy = incidentStatusChange.ChangedBy?.ToDTO(),
                 ChangedDateTime = incidentStatusChange.ChangedDateTime,
                 Id = incidentStatusChange.Id,
-                NewStatus = incidentStatusChange.NewStatus,
-                OldStatus = incidentStatusChange.OldStatus
+                NewStatus = incidentStatusChange.NewStatus.ToString(),
+                OldStatus = incidentStatusChange.OldStatus.ToString()
             };
         }
     }
