@@ -21,13 +21,13 @@ namespace Dotnet.EventSourcing.Application.Queries
 
         public async Task<User?> GetUserByIdAsync(EventId eventId, Guid userId, CancellationToken cancellationToken)
         {
-            _logger.LogInformation(eventId, $"{GetUserByIdAsync} called with parameters: userId {userId}");
+            _logger.LogInformation(eventId, $"{nameof(GetUserByIdAsync)} called with parameters: userId {userId}");
             return await _userRepository.GetUserByIdAsync(userId, cancellationToken);
         }
 
         public async Task<User?> GetUserByNameAsync(EventId eventId, string firstName, string lastName, CancellationToken cancellationToken)
         {
-            _logger.LogInformation(eventId, $"{GetUserByNameAsync} called with parameters: firstName {firstName}, lastName: {lastName}");
+            _logger.LogInformation(eventId, $"{nameof(GetUserByNameAsync)} called with parameters: firstName {firstName}, lastName: {lastName}");
             return await _userRepository.GetUserByNameAsync(firstName, lastName, cancellationToken);
         }
     }

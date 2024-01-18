@@ -10,7 +10,18 @@
   <PropertyGroup Condition=" '$(RunConfiguration)' == 'http' " />
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="7.0.14" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="7.0.15">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="7.0.11" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Dotnet.EventSourcing.Application\Dotnet.EventSourcing.Application.csproj" />
+    <ProjectReference Include="..\Dotnet.EventSourcing.Domain\Dotnet.EventSourcing.Domain.csproj" />
+    <ProjectReference Include="..\Dotnet.EventSourcing.Infrastructure\Dotnet.EventSourcing.Infrastructure.csproj" />
+    <ProjectReference Include="..\Dotnet.EventSourcing.SharedKernel\Dotnet.EventSourcing.SharedKernel.csproj" />
   </ItemGroup>
 
 </Project>
