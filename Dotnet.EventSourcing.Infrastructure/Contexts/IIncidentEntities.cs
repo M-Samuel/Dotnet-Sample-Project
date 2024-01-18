@@ -9,7 +9,8 @@ namespace Dotnet.EventSourcing.Infrastructure.Contexts
 		
 		DbSet<Incident> Incidents { get; set; }
 		void IncidentBuilder(EntityTypeBuilder<Incident> builder);
-		// DbSet<IncidentStatusChange> IncidentStatusChanges { get; set; }
-	}
+		DbSet<IncidentStatusChange> IncidentStatusChanges { get; set; }
+        void IncidentStatusChangeBuilder(EntityTypeBuilder<IncidentStatusChange> builder);
+    }
 }
 

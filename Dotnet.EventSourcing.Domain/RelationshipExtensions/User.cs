@@ -8,5 +8,8 @@ namespace Dotnet.EventSourcing.Domain.UserDomain
     {
         public ICollection<Incident> IncidentsAsAssignee { get; set; } = new List<Incident>();
         public ICollection<Incident> IncidentsAsCustomer { get; set; } = new List<Incident>();
+
+
+        public ICollection<IncidentStatusChange> IncidentStatusChanges { get; set; } = new List<IncidentStatusChange>();
     }
 }

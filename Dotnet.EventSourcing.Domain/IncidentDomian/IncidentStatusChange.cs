@@ -5,7 +5,7 @@ using Dotnet.EventSourcing.SharedKernel;
 
 namespace Dotnet.EventSourcing.Domain.IncidentDomain
 {
-    public class IncidentStatusChange : IEntity
+    public partial class IncidentStatusChange : IEntity
     {
         public Guid Id { get; set; }
         public User? ChangedBy { get; set; }

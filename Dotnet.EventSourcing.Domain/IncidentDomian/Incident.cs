@@ -14,7 +14,7 @@ namespace Dotnet.EventSourcing.Domain.IncidentDomain
         public IncidentStatus Status { get; set; }
         public string? Title { get; set; }
         public string? Description { get; set; }
-        //public List<IncidentStatusChange> IncidentStatusChanges { get; set; } = new();
+        public List<IncidentStatusChange> IncidentStatusChanges { get; set; } = new();
 
         public void UpdateStatus(IncidentStatus newStatus, User changedBy)
         {
@@ -27,7 +27,7 @@ namespace Dotnet.EventSourcing.Domain.IncidentDomain
                 OldStatus = Status
             };
 
-            //IncidentStatusChanges.Add(incidentStatusChange);
+            IncidentStatusChanges.Add(incidentStatusChange);
 
             Status = newStatus;
         }

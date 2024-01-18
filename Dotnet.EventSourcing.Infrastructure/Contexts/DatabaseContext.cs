@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Dotnet.EventSourcing.Infrastructure.Contexts
 {
-    public class DatabaseContext : DbContext, IUnitOfWork, IUserEntities, IIncidentEntities
+    public class DatabaseContext : DbContext, IUserEntities, IIncidentEntities
     {
         public DatabaseContext(DbContextOptions options) : base(options)
         {
@@ -17,16 +17,13 @@ namespace Dotnet.EventSourcing.Infrastructure.Contexts
         {
             modelBuilder.Entity<User>(UserBuilder);
             modelBuilder.Entity<Incident>(IncidentBuilder);
+            modelBuilder.Entity<IncidentStatusChange>(IncidentStatusChangeBuilder);
         }
 
         public DbSet<User> Users { get; set; }
         public DbSet<Incident> Incidents { get; set; }
-		// public DbSet<IncidentStatusChange> IncidentStatusChanges { get; set; }
+		public DbSet<IncidentStatusChange> IncidentStatusChanges { get; set; }
 
-        public async Task SaveChangesAsync()
-        {
-            await base.SaveChangesAsync();
-        }
 
         public void UserBuilder(EntityTypeBuilder<User> builder)
         {
@@ -53,6 +50,25 @@ namespace Dotnet.EventSourcing.Infrastructure.Contexts
             builder.Property(i => i.CreatedDate);
             builder.Property(i => i.Description);
             builder.Property(i => i.Title);
+        }
+
+        public void IncidentStatusChangeBuilder(EntityTypeBuilder<IncidentStatusChange> builder)
+        {
+            builder.HasKey(isc => isc.Id);
+            builder
+            .HasOne(isc => isc.Incident)
+            .WithMany(i => i.IncidentStatusChanges)
+            .HasForeignKey(isc => isc.IncidentId);
+
+            builder
+            .HasOne(isc => isc.ChangedBy)
+            .WithMany(u => u.IncidentStatusChanges)
+            .HasForeignKey(isc => isc.ChangedByUserId);
+
+
+            builder.Property(isc => isc.NewStatus);
+            builder.Property(isc => isc.OldStatus);
+            builder.Property(isc => isc.ChangedDateTime);
         }
     }
 }

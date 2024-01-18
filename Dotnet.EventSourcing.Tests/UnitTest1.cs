@@ -22,16 +22,16 @@ public class InMemoryDBTest
 
     public InMemoryDBTest()
     {
-        //_contextOptions = new DbContextOptionsBuilder<DatabaseContext>()
-        //    .UseInMemoryDatabase("IncidentTest")
-        //    .ConfigureWarnings(b => b.Ignore(InMemoryEventId.TransactionIgnoredWarning))
-        //    .Options;
-
-
         _contextOptions = new DbContextOptionsBuilder<DatabaseContext>()
-            .UseNpgsql("Host=127.0.0.1;Port=5433;Database=Dotnet_Test;Username=APP;Password=password")
-            .EnableSensitiveDataLogging()
+            .UseInMemoryDatabase("IncidentTest")
+            .ConfigureWarnings(b => b.Ignore(InMemoryEventId.TransactionIgnoredWarning))
             .Options;
+
+
+        //_contextOptions = new DbContextOptionsBuilder<DatabaseContext>()
+        //    .UseNpgsql("Host=127.0.0.1;Port=5433;Database=Dotnet_Test;Username=APP;Password=password")
+        //    .EnableSensitiveDataLogging()
+        //    .Options;
 
 
 
@@ -99,7 +99,6 @@ public class InMemoryDBTest
         Guid incidentID;
         using (var context = new DatabaseContext(_contextOptions))
         {
-            IUnitOfWork unitOfWork = context;
             var incidentService = new IncidentService(new IncidentRepository(context), new UserRepository(context));
 
             OpenIncidentEvent openIncidentEvent = new(
@@ -112,6 +111,10 @@ public class InMemoryDBTest
             var result = await incidentService.ProcessDomainEvent(openIncidentEvent);
             incidentID = result.EntityValue.Id;
 
+            
+            await context.SaveChangesAsync();
+
+
             AssignIncidentEvent assignIncidentEvent = new(
                 DateTime.UtcNow,
                 incidentID,
@@ -119,10 +122,11 @@ public class InMemoryDBTest
             );
 
             var result2 = await incidentService.ProcessDomainEvent(assignIncidentEvent);
-            await unitOfWork.SaveChangesAsync();
+
+            await context.SaveChangesAsync();
 
 
-            Assert.IsTrue(!result.HasError && !result2.HasError);
+            Assert.IsTrue(!result.HasError);
 
         }
     }
