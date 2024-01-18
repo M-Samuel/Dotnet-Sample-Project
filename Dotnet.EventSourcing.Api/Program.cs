@@ -43,15 +43,29 @@ builder.Services.AddScoped<IOpenIncidentCommand, OpenIncidentCommand>();
 
 var app = builder.Build();
 
-var serviceScopeFactory = app.Services.GetService<IServiceScopeFactory>();
-if(serviceScopeFactory != null)
+
+if (app.Environment.IsDevelopment())
 {
-    using (var scope = serviceScopeFactory.CreateScope())
-    using (var context = scope.ServiceProvider.GetRequiredService<DatabaseContext>())
+    /*
+     Commands for migrations:
+    add-migration "{Migration Name}" / or / dotnet ef migrations add "{Migration Name}"
+    update-database // taking latest
+    update-database "{Migration Name}"
+     * 
+     */
+    var serviceScopeFactory = app.Services.GetService<IServiceScopeFactory>();
+    if (serviceScopeFactory != null)
     {
-        context.Database.EnsureCreated();
+        using (var scope = serviceScopeFactory.CreateScope())
+        using (var context = scope.ServiceProvider.GetRequiredService<DatabaseContext>())
+        {
+            context.Database.Migrate();
+        }
     }
 }
+    
+
+
 
 
 // Configure the HTTP request pipeline.
