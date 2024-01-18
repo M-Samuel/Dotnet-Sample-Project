@@ -1,4 +1,5 @@
 ﻿using Dotnet.EventSourcing.Application.Commands.CreateUser;
+using Dotnet.EventSourcing.Application.Commands.OpenIncident;
 using Dotnet.EventSourcing.Application.Queries;
 using Dotnet.EventSourcing.Domain.IncidentDomain;
 using Dotnet.EventSourcing.Domain.UserDomain;
@@ -36,6 +37,8 @@ builder.Services.AddScoped<IIncidentService, IncidentService>();
 builder.Services.AddScoped<IUserQueries,  UserQueries>();
 builder.Services.AddScoped<ICreateUserCommand, CreateUserCommand>();
 
+builder.Services.AddScoped<IIncidentQueries, IncidentQueries>();
+builder.Services.AddScoped<IOpenIncidentCommand, OpenIncidentCommand>();
 
 var app = builder.Build();
 

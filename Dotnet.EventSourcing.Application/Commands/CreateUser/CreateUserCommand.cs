@@ -28,12 +28,7 @@ namespace Dotnet.EventSourcing.Application.Commands.CreateUser
         {
             _logger.LogInformation(eventId, $"{nameof(CreateUserCommand)} called with parameters: {JsonSerializer.Serialize(commandData)}");
 
-            CreateUserEvent createUserEvent = new(
-                DateTime.UtcNow, 
-                commandData.FirstName ?? "", 
-                commandData.LastName ?? ""
-            );
-            var result = await _userService.ProcessDomainEvent(createUserEvent, cancellationToken);
+            var result = await _userService.ProcessDomainEvent(commandData.ToEvent(), cancellationToken);
             await _unitOfWork.SaveChangesAsync(cancellationToken);
             return result;
         }
