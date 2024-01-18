@@ -28,7 +28,10 @@ namespace Dotnet.EventSourcing.Application.Commands.OpenIncident
             _logger.LogInformation(eventId, $"{nameof(OpenIncidentCommand)} called with parameters: {JsonSerializer.Serialize(commandData)}");
 
             var result = await _incidentService.ProcessDomainEvent(commandData.ToEvent(), cancellationToken);
-            await _unitOfWork.SaveChangesAsync(cancellationToken);
+
+            if (!result.HasError)
+                await _unitOfWork.SaveChangesAsync(cancellationToken);
+
             return result;
         }
     }
