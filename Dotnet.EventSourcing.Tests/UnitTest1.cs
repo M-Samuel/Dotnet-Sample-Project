@@ -52,7 +52,7 @@ public class InMemoryDBTest
         using var context = new DatabaseContext(_contextOptions);
         UserRepository userRepository = new UserRepository(context);
 
-        Domain.UserDomain.User? user = await userRepository.GetUserByNameAsync("Sam", "Modeste");
+        Domain.UserDomain.User? user = await userRepository.GetUserByNameAsync("Sam", "Modeste", default);
         Assert.IsNotNull(user);
 
     }
@@ -63,12 +63,12 @@ public class InMemoryDBTest
         using var context = new DatabaseContext(_contextOptions);
         UserRepository userRepository = new UserRepository(context);
 
-        await userRepository.CreateUserAsync(new Domain.UserDomain.User() { FirstName = "Kevin", LastName = "Modeste", Id = Guid.NewGuid() });
+        await userRepository.CreateUserAsync(new Domain.UserDomain.User() { FirstName = "Kevin", LastName = "Modeste", Id = Guid.NewGuid() }, default);
 
         context.SaveChanges();
 
 
-        Domain.UserDomain.User? user = await userRepository.GetUserByNameAsync("Kevin", "Modeste");
+        Domain.UserDomain.User? user = await userRepository.GetUserByNameAsync("Kevin", "Modeste", default);
 
         Assert.IsNotNull(user);
 
@@ -81,7 +81,7 @@ public class InMemoryDBTest
         UserRepository userRepository = new UserRepository(context);
         UserService userService = new(userRepository);
 
-        var result = await userService.ProcessDomainEvent(new CreateUserEvent(DateTime.UtcNow, "Sam", "Modeste"));
+        var result = await userService.ProcessDomainEvent(new CreateUserEvent(DateTime.UtcNow, "Sam", "Modeste"), default);
 
         foreach (IError error in result.DomainErrors)
         {
@@ -108,7 +108,7 @@ public class InMemoryDBTest
                 "Slow response time on database level"
             );
 
-            var result = await incidentService.ProcessDomainEvent(openIncidentEvent);
+            var result = await incidentService.ProcessDomainEvent(openIncidentEvent, default);
             incidentID = result.EntityValue.Id;
 
             
@@ -121,7 +121,7 @@ public class InMemoryDBTest
                 _users[1].Id
             );
 
-            var result2 = await incidentService.ProcessDomainEvent(assignIncidentEvent);
+            var result2 = await incidentService.ProcessDomainEvent(assignIncidentEvent, default);
 
             await context.SaveChangesAsync();
 

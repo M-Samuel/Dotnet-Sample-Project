@@ -21,7 +21,7 @@ public class OpenIncidentEventTest
             "Connection Pool saturatued"
         );
 
-        var result = await incidentService.ProcessDomainEvent(openIncidentEvent);
+        var result = await incidentService.ProcessDomainEvent(openIncidentEvent, default);
 
         Assert.IsFalse(result.HasError);
 
@@ -41,7 +41,7 @@ public class OpenIncidentEventTest
             "Connection Pool saturatued"
         );
 
-        var result = await incidentService.ProcessDomainEvent(openIncidentEvent);
+        var result = await incidentService.ProcessDomainEvent(openIncidentEvent, default);
 
         Assert.IsTrue(result.DomainErrors.Any(error => error is UserNotFoundError));
 
@@ -50,17 +50,17 @@ public class OpenIncidentEventTest
 
     private class FakeUser_RetursUserNotFoundError_FakeIncidentRepository : IIncidentRepository
     {
-        public async Task CreateIncidentAsync(Incident incident)
+        public async Task CreateIncidentAsync(Incident incident, CancellationToken cancellationToken)
         {
             await Task.CompletedTask;
         }
 
-        public Task<Incident?> GetIncidentByIdAsync(Guid incidentId)
+        public Task<Incident?> GetIncidentByIdAsync(Guid incidentId, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
 
-        public Task UpdateIncidentAsync(Incident incident)
+        public void UpdateIncident(Incident incident)
         {
             throw new NotImplementedException();
         }
@@ -68,19 +68,19 @@ public class OpenIncidentEventTest
 
     private class UserExists_FakeUserRepository : IUserRepository
     {
-        public Task CreateUserAsync(User user)
+        public Task CreateUserAsync(User user, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<User?> GetUserByIdAsync(Guid userId)
+        public async Task<User?> GetUserByIdAsync(Guid userId, CancellationToken cancellationToken)
         {
             var user = User.Create("John", "Doe");
             user.Id = userId;
             return await Task.FromResult(user);
         }
 
-        public Task<User?> GetUserByNameAsync(string firstName, string lastName)
+        public Task<User?> GetUserByNameAsync(string firstName, string lastName, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
@@ -88,17 +88,17 @@ public class OpenIncidentEventTest
 
     private class UserDoesNotExists_FakeUserRepository : IUserRepository
     {
-        public Task CreateUserAsync(User user)
+        public Task CreateUserAsync(User user, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<User?> GetUserByIdAsync(Guid userId)
+        public async Task<User?> GetUserByIdAsync(Guid userId, CancellationToken cancellationToken)
         {
             return await Task.FromResult<User?>(null);
         }
 
-        public Task<User?> GetUserByNameAsync(string firstName, string lastName)
+        public Task<User?> GetUserByNameAsync(string firstName, string lastName, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
@@ -106,17 +106,17 @@ public class OpenIncidentEventTest
 
     private class Correct_RetursNoError_FakeIncidentRepository : IIncidentRepository
     {
-        public async Task CreateIncidentAsync(Incident incident)
+        public async Task CreateIncidentAsync(Incident incident, CancellationToken cancellationToken)
         {
             await Task.CompletedTask;
         }
 
-        public Task<Incident?> GetIncidentByIdAsync(Guid incidentId)
+        public Task<Incident?> GetIncidentByIdAsync(Guid incidentId, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
 
-        public Task UpdateIncidentAsync(Incident incident)
+        public void UpdateIncident(Incident incident)
         {
             throw new NotImplementedException();
         }

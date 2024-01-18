@@ -2,6 +2,7 @@
 using Dotnet.EventSourcing.Domain.UserDomain;
 using Dotnet.EventSourcing.Domain.UserDomain.UserDomainEvents;
 using Dotnet.EventSourcing.Domain.UserDomain.UserErrors;
+using System.Threading;
 
 namespace Dotnet.EventSourcing.DomainTests.UserDomain;
 
@@ -27,7 +28,7 @@ public class CreateUserEventTest
             "John",
             "Doe"
         );
-        var result = await userService.ProcessDomainEvent(createUserEvent);
+        var result = await userService.ProcessDomainEvent(createUserEvent, default);
 
         Assert.IsFalse(result.HasError);
     }
@@ -43,7 +44,7 @@ public class CreateUserEventTest
             "John",
             "Doe"
         );
-        var result = await userService.ProcessDomainEvent(createUserEvent);
+        var result = await userService.ProcessDomainEvent(createUserEvent, default);
 
         Assert.IsTrue(result.DomainErrors.Any(error => error is UserAlreadyExistsError));
     }
@@ -59,7 +60,7 @@ public class CreateUserEventTest
             "",
             "Doe"
         );
-        var result = await userService.ProcessDomainEvent(createUserEvent);
+        var result = await userService.ProcessDomainEvent(createUserEvent, default);
 
         Assert.IsTrue(result.DomainErrors.Any(error => error is UserFirstNameEmptyError));
     }
@@ -75,7 +76,7 @@ public class CreateUserEventTest
             "John",
             ""
         );
-        var result = await userService.ProcessDomainEvent(createUserEvent);
+        var result = await userService.ProcessDomainEvent(createUserEvent, default);
 
         Assert.IsTrue(result.DomainErrors.Any(error => error is UserLastNameEmptyError));
     }
@@ -83,25 +84,25 @@ public class CreateUserEventTest
 
     private class Correct_ReturnsNoError_FakeUserRepository : IUserRepository
     {
-        public async Task CreateUserAsync(User user)
+        public async Task CreateUserAsync(User user, CancellationToken cancellationToken)
             => await Task.CompletedTask;
 
-        public Task<User?> GetUserByIdAsync(Guid userId)
+        public Task<User?> GetUserByIdAsync(Guid userId, CancellationToken cancellationToken)
             => throw new NotImplementedException();
 
-        public async Task<User?> GetUserByNameAsync(string firstName, string lastName)
+        public async Task<User?> GetUserByNameAsync(string firstName, string lastName, CancellationToken cancellationToken)
             => await Task.FromResult<User?>(null);
     }
 
     private class Duplicate_ReturnsUserAlreadyExistsError_FakeUserRepository : IUserRepository
     {
-        public async Task CreateUserAsync(User user)
+        public async Task CreateUserAsync(User user, CancellationToken cancellationToken)
             => await Task.CompletedTask;
 
-        public Task<User?> GetUserByIdAsync(Guid userId)
+        public Task<User?> GetUserByIdAsync(Guid userId, CancellationToken cancellationToken)
             => throw new NotImplementedException();
 
-        public async Task<User?> GetUserByNameAsync(string firstName, string lastName)
+        public async Task<User?> GetUserByNameAsync(string firstName, string lastName, CancellationToken cancellationToken)
         {
             User user = User.Create(firstName, lastName);
             return await Task.FromResult<User?>(user);
@@ -110,25 +111,25 @@ public class CreateUserEventTest
 
     private class NoFirstName_ReturnsUserFirstNameEmptyError_FakeUserRepository : IUserRepository
     {
-        public async Task CreateUserAsync(User user)
+        public async Task CreateUserAsync(User user, CancellationToken cancellationToken)
             => await Task.CompletedTask;
 
-        public Task<User?> GetUserByIdAsync(Guid userId)
+        public Task<User?> GetUserByIdAsync(Guid userId, CancellationToken cancellationToken)
             => throw new NotImplementedException();
 
-        public async Task<User?> GetUserByNameAsync(string firstName, string lastName)
+        public async Task<User?> GetUserByNameAsync(string firstName, string lastName, CancellationToken cancellationToken)
             => await Task.FromResult<User?>(null);
     }
 
     private class NoLastName_ReturnsUserLastNameEmptyError_FakeUserRepository : IUserRepository
     {
-        public async Task CreateUserAsync(User user)
+        public async Task CreateUserAsync(User user, CancellationToken cancellationToken)
             => await Task.CompletedTask;
 
-        public Task<User?> GetUserByIdAsync(Guid userId)
+        public Task<User?> GetUserByIdAsync(Guid userId, CancellationToken cancellationToken)
             => throw new NotImplementedException();
 
-        public async Task<User?> GetUserByNameAsync(string firstName, string lastName)
+        public async Task<User?> GetUserByNameAsync(string firstName, string lastName, CancellationToken cancellationToken)
             => await Task.FromResult<User?>(null);
     }
 

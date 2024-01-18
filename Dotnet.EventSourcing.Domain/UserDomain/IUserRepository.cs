@@ -5,9 +5,9 @@ namespace Dotnet.EventSourcing.Domain.UserDomain
 {
     public interface IUserRepository
     {
-        Task<User?> GetUserByIdAsync(Guid userId);
-        Task<User?> GetUserByNameAsync(string firstName, string lastName);
-        Task CreateUserAsync(User user);
+        Task<User?> GetUserByIdAsync(Guid userId, CancellationToken cancellationToken);
+        Task<User?> GetUserByNameAsync(string firstName, string lastName, CancellationToken cancellationToken);
+        Task CreateUserAsync(User user, CancellationToken cancellationToken);
 
 
     }

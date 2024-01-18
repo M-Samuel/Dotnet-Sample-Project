@@ -20,7 +20,7 @@ public class AcknowledgeIncidentEventTest
             Guid.NewGuid()
         );
 
-        var result = await incidentService.ProcessDomainEvent(acknowledgeIncidentEvent);
+        var result = await incidentService.ProcessDomainEvent(acknowledgeIncidentEvent, default);
 
         Assert.IsFalse(result.HasError);
 
@@ -39,7 +39,7 @@ public class AcknowledgeIncidentEventTest
             Guid.NewGuid()
         );
 
-        var result = await incidentService.ProcessDomainEvent(acknowledgeIncidentEvent);
+        var result = await incidentService.ProcessDomainEvent(acknowledgeIncidentEvent, default);
 
         Assert.IsTrue(result.DomainErrors.Any(error => error is IncidentNotFoundError));
 
@@ -58,7 +58,7 @@ public class AcknowledgeIncidentEventTest
             Guid.NewGuid()
         );
 
-        var result = await incidentService.ProcessDomainEvent(acknowledgeIncidentEvent);
+        var result = await incidentService.ProcessDomainEvent(acknowledgeIncidentEvent, default);
 
         Assert.IsTrue(result.DomainErrors.Any(error => error is UserNotFoundError));
 
@@ -66,17 +66,17 @@ public class AcknowledgeIncidentEventTest
 
     private class UserNotExist_FakeUserRepository : IUserRepository
     {
-        public Task CreateUserAsync(User user)
+        public Task CreateUserAsync(User user, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<User?> GetUserByIdAsync(Guid userId)
+        public async Task<User?> GetUserByIdAsync(Guid userId, CancellationToken cancellationToken)
         {
             return await Task.FromResult<User?>(null);
         }
 
-        public Task<User?> GetUserByNameAsync(string firstName, string lastName)
+        public Task<User?> GetUserByNameAsync(string firstName, string lastName, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
@@ -84,19 +84,19 @@ public class AcknowledgeIncidentEventTest
 
     private class UserExists_FakeUserRepository : IUserRepository
     {
-        public Task CreateUserAsync(User user)
+        public Task CreateUserAsync(User user, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<User?> GetUserByIdAsync(Guid userId)
+        public async Task<User?> GetUserByIdAsync(Guid userId, CancellationToken cancellationToken)
         {
             var user = User.Create("John", "Doe");
             user.Id = userId;
             return await Task.FromResult(user);
         }
 
-        public Task<User?> GetUserByNameAsync(string firstName, string lastName)
+        public Task<User?> GetUserByNameAsync(string firstName, string lastName, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
@@ -104,12 +104,12 @@ public class AcknowledgeIncidentEventTest
 
     private class Correct_RetursNoError_FakeIncidentRepository : IIncidentRepository
     {
-        public Task CreateIncidentAsync(Incident incident)
+        public Task CreateIncidentAsync(Incident incident, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<Incident?> GetIncidentByIdAsync(Guid incidentId)
+        public async Task<Incident?> GetIncidentByIdAsync(Guid incidentId, CancellationToken cancellationToken)
         {
             Incident incident = Incident.CreateNew(
                 DateTime.UtcNow,
@@ -124,25 +124,25 @@ public class AcknowledgeIncidentEventTest
             return await Task.FromResult(incident);
         }
 
-        public async Task UpdateIncidentAsync(Incident incident)
+        public void UpdateIncident(Incident incident)
         {
-            await Task.CompletedTask;
+            
         }
     }
 
     private class FakeIncident_RetursIncidentNotExistsError_FakeIncidentRepository : IIncidentRepository
     {
-        public Task CreateIncidentAsync(Incident incident)
+        public Task CreateIncidentAsync(Incident incident, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<Incident?> GetIncidentByIdAsync(Guid incidentId)
+        public async Task<Incident?> GetIncidentByIdAsync(Guid incidentId, CancellationToken cancellationToken)
         {
             return await Task.FromResult<Incident?>(null);
         }
 
-        public Task UpdateIncidentAsync(Incident incident)
+        public void UpdateIncident(Incident incident)
         {
             throw new NotImplementedException();
         }

@@ -16,22 +16,21 @@ namespace Dotnet.EventSourcing.Infrastructure.Repositories
         }
 
 
-        public async Task CreateIncidentAsync(Incident incident)
+        public async Task CreateIncidentAsync(Incident incident, CancellationToken cancellationToken)
         {
-            await _databaseContext.AddAsync(incident);
+            await _databaseContext.AddAsync(incident, cancellationToken);
         }
 
-        public async Task<Incident?> GetIncidentByIdAsync(Guid incidentId)
+        public async Task<Incident?> GetIncidentByIdAsync(Guid incidentId, CancellationToken cancellationToken)
         {
             return await _databaseContext.Incidents
             .AsQueryable()
-            .SingleOrDefaultAsync(incident => incident.Id == incidentId);
+            .SingleOrDefaultAsync(incident => incident.Id == incidentId, cancellationToken);
         }
 
-        public async Task UpdateIncidentAsync(Incident incident)
+        public void UpdateIncident(Incident incident)
         {
             _databaseContext.Update(incident);
-            await Task.CompletedTask;
         }
     }
 }

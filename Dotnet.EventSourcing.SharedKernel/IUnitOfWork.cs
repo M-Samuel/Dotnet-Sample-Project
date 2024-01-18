@@ -3,7 +3,9 @@ namespace Dotnet.EventSourcing.SharedKernel
 {
 	public interface IUnitOfWork : IDisposable
 	{
-		Task SaveChangesAsync();
-	}
+		Task<int> SaveChangesAsync();
+
+        Task<int> SaveChangesAsync(CancellationToken cancellationToken);
+    }
 }
 

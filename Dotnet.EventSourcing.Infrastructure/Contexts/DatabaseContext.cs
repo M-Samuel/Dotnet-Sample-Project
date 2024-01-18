@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Dotnet.EventSourcing.Infrastructure.Contexts
 {
-    public class DatabaseContext : DbContext, IUserEntities, IIncidentEntities
+    public class DatabaseContext : DbContext, IUserEntities, IIncidentEntities, IUnitOfWork
     {
         public DatabaseContext(DbContextOptions options) : base(options)
         {
@@ -69,6 +69,16 @@ namespace Dotnet.EventSourcing.Infrastructure.Contexts
             builder.Property(isc => isc.NewStatus);
             builder.Property(isc => isc.OldStatus);
             builder.Property(isc => isc.ChangedDateTime);
+        }
+
+        public async Task<int> SaveChangesAsync()
+        {
+            return await base.SaveChangesAsync();
+        }
+
+        public async Task<int> SaveChangesAsyncWithCancellationToken(CancellationToken cancellationToken)
+        {
+            return await base.SaveChangesAsync(cancellationToken);
         }
     }
 }

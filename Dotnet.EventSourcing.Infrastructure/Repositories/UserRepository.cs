@@ -17,12 +17,12 @@ namespace Dotnet.EventSourcing.Infrastructure.Repositories
             _databaseContext = databaseContext;
         }
 
-        public async Task CreateUserAsync(UserDomain.User user)
+        public async Task CreateUserAsync(UserDomain.User user, CancellationToken cancellationToken)
         {
             await _databaseContext.AddAsync(user);
         }
 
-        public async Task<UserDomain.User?> GetUserByIdAsync(Guid userId)
+        public async Task<UserDomain.User?> GetUserByIdAsync(Guid userId, CancellationToken cancellationToken)
         {
             var user = await _databaseContext.Users
                 .AsQueryable()
@@ -33,7 +33,7 @@ namespace Dotnet.EventSourcing.Infrastructure.Repositories
             return user;
         }
 
-        public async Task<UserDomain.User?> GetUserByNameAsync(string firstName, string lastName)
+        public async Task<UserDomain.User?> GetUserByNameAsync(string firstName, string lastName, CancellationToken cancellationToken)
         {
 
             var user = await _databaseContext.Users

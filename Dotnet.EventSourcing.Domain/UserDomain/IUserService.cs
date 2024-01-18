@@ -6,7 +6,7 @@ namespace Dotnet.EventSourcing.Domain.UserDomain
 {
 	public interface IUserService
 	{
-		Task<Result<User>> ProcessDomainEvent(CreateUserEvent createUserEvent);
+		Task<Result<User>> ProcessDomainEvent(CreateUserEvent createUserEvent, CancellationToken cancellationToken);
 	}
 }
 
