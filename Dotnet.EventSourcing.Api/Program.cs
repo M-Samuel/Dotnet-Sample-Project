@@ -20,7 +20,8 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<DatabaseContext>(
     options => options
             .UseLoggerFactory(LoggerFactory.Create(builder => builder.AddConsole().AddDebug()))
-            .UseInMemoryDatabase("IncidentTest")
+            .UseSqlServer(@"Server=(localdb)\mssqllocaldb;Database=Test")
+            //.UseInMemoryDatabase("IncidentTest")
             .EnableDetailedErrors()
             .ConfigureWarnings(b => b.Ignore(InMemoryEventId.TransactionIgnoredWarning))
 );
@@ -41,6 +42,17 @@ builder.Services.AddScoped<IIncidentQueries, IncidentQueries>();
 builder.Services.AddScoped<IOpenIncidentCommand, OpenIncidentCommand>();
 
 var app = builder.Build();
+
+var serviceScopeFactory = app.Services.GetService<IServiceScopeFactory>();
+if(serviceScopeFactory != null)
+{
+    using (var scope = serviceScopeFactory.CreateScope())
+    using (var context = scope.ServiceProvider.GetRequiredService<DatabaseContext>())
+    {
+        context.Database.EnsureCreated();
+    }
+}
+
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
