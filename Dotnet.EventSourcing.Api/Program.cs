@@ -1,4 +1,5 @@
-﻿using Dotnet.EventSourcing.Application.Commands.CreateUser;
+﻿using Dotnet.EventSourcing.Application.Commands.AssignIncident;
+using Dotnet.EventSourcing.Application.Commands.CreateUser;
 using Dotnet.EventSourcing.Application.Commands.OpenIncident;
 using Dotnet.EventSourcing.Application.Queries;
 using Dotnet.EventSourcing.Domain.IncidentDomain;
@@ -20,8 +21,8 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<DatabaseContext>(
     options => options
             .UseLoggerFactory(LoggerFactory.Create(builder => builder.AddConsole().AddDebug()))
-            //.UseSqlServer(@"Server=(localdb)\mssqllocaldb;Database=Test")
-            .UseInMemoryDatabase("IncidentTest")
+            .UseSqlServer(@"Server=(localdb)\mssqllocaldb;Database=Test")
+            //.UseInMemoryDatabase("IncidentTest")
             .EnableDetailedErrors()
             .ConfigureWarnings(b => b.Ignore(InMemoryEventId.TransactionIgnoredWarning))
 );
@@ -40,6 +41,7 @@ builder.Services.AddScoped<ICreateUserCommand, CreateUserCommand>();
 
 builder.Services.AddScoped<IIncidentQueries, IncidentQueries>();
 builder.Services.AddScoped<IOpenIncidentCommand, OpenIncidentCommand>();
+builder.Services.AddScoped<IAssignIncidentCommand, AssignIncidentCommand>();
 
 var app = builder.Build();
 

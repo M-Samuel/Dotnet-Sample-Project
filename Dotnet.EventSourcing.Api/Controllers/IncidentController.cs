@@ -1,11 +1,9 @@
-﻿using Dotnet.EventSourcing.Application.Commands.CreateUser;
+﻿using Dotnet.EventSourcing.Application.Commands.AssignIncident;
 using Dotnet.EventSourcing.Application.Commands.OpenIncident;
 using Dotnet.EventSourcing.Application.DTOS;
 using Dotnet.EventSourcing.Application.Queries;
 using Dotnet.EventSourcing.Domain.IncidentDomain;
-using Dotnet.EventSourcing.Domain.UserDomain;
 using Dotnet.EventSourcing.SharedKernel;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Dotnet.EventSourcing.Api.Controllers
@@ -16,11 +14,15 @@ namespace Dotnet.EventSourcing.Api.Controllers
     {
         private readonly IIncidentQueries _incidentQueries;
         private readonly IOpenIncidentCommand _openIncidentCommand;
+        private readonly IAssignIncidentCommand _assignIncidentCommand;
 
-        public IncidentController(IIncidentQueries incidentQueries, IOpenIncidentCommand openIncidentCommand)
+        public IncidentController(IIncidentQueries incidentQueries
+            ,IOpenIncidentCommand openIncidentCommand
+            ,IAssignIncidentCommand assignIncidentCommand)
         {
             _incidentQueries = incidentQueries;
             _openIncidentCommand = openIncidentCommand;
+            _assignIncidentCommand = assignIncidentCommand;
         }
 
 
@@ -45,6 +47,20 @@ namespace Dotnet.EventSourcing.Api.Controllers
                 return BadRequest(result.DomainErrors);
 
             return new CreatedAtActionResult(nameof(GetIncidentById), "Incident", new { id = result.EntityValue.Id }, result.EntityValue.ToDTO());
+        }
+
+
+        [HttpPost("/incident/assign")]
+
+        public async Task<ActionResult<IncidentDTO>> AssignUser([FromForm] AssignIncidentData assignIncidentData, CancellationToken cancellationToken)
+        {
+            EventId eventId = new EventId(0, Guid.NewGuid().ToString());
+            Result<Incident> result = await _assignIncidentCommand.ProcessCommandAsync(assignIncidentData, eventId, cancellationToken);
+
+            if (result.HasError)
+                return BadRequest(result.DomainErrors);
+
+            return Ok(result.EntityValue.ToDTO());
         }
     }
 }
