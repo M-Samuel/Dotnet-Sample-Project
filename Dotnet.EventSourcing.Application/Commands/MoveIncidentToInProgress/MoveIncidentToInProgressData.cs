@@ -3,15 +3,15 @@ using Dotnet.EventSourcing.SharedKernel;
 
 namespace Dotnet.EventSourcing.Application.Commands.MoveIncidentToInProgress
 {
-    public class MoveIncidentToInProgressData : ICommandData<AssignIncidentEvent>
+    public class MoveIncidentToInProgressData : ICommandData<MoveIncidentToInProgressEvent>
     {
         public Guid IncidentId { get; set; }
         public Guid ChangedByUserId { get; set; }
 
 
-        public AssignIncidentEvent ToEvent()
+        public MoveIncidentToInProgressEvent ToEvent()
         {
-            return new AssignIncidentEvent(DateTime.UtcNow, IncidentId, ChangedByUserId);   
+            return new MoveIncidentToInProgressEvent(DateTime.UtcNow, IncidentId, ChangedByUserId);   
         }
     }
 }
