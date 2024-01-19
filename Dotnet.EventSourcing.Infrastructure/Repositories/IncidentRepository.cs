@@ -33,7 +33,8 @@ namespace Dotnet.EventSourcing.Infrastructure.Repositories
 
         public void UpdateIncident(Incident incident)
         {
-            _databaseContext.Update(incident);
+            _databaseContext.Incidents.Update(incident);
+            _databaseContext.IncidentStatusChanges.UpdateRange(incident.IncidentStatusChanges);
         }
     }
 }

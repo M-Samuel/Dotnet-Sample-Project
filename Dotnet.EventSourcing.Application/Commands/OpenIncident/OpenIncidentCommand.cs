@@ -30,7 +30,7 @@ namespace Dotnet.EventSourcing.Application.Commands.OpenIncident
             var result = await _incidentService.ProcessDomainEvent(commandData.ToEvent(), cancellationToken);
 
             if (!result.HasError)
-                await _unitOfWork.SaveChangesAsync(cancellationToken);
+                await _unitOfWork.TrySaveChangesAsync(cancellationToken);
 
             return result;
         }

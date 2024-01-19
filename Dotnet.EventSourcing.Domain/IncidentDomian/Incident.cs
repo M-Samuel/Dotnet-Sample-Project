@@ -22,7 +22,6 @@ namespace Dotnet.EventSourcing.Domain.IncidentDomain
             {
                 ChangedBy = changedBy,
                 ChangedDateTime = DateTime.UtcNow,
-                Id = Guid.NewGuid(),
                 NewStatus = newStatus,
                 OldStatus = Status
             };
@@ -41,7 +40,6 @@ namespace Dotnet.EventSourcing.Domain.IncidentDomain
 		{
             Incident incident = new()
             {
-                Id = Guid.NewGuid(),
                 CreatedDate = createdDate,
                 Customer = customer,
                 Title = title,

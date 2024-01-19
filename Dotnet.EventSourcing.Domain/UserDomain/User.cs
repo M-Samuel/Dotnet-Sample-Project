@@ -15,7 +15,6 @@ namespace Dotnet.EventSourcing.Domain.UserDomain
         {
             User newUser = new()
             {
-                Id = Guid.NewGuid(),
                 FirstName = firstName,
                 LastName = lastName
             };

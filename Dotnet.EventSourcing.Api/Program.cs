@@ -1,5 +1,8 @@
-﻿using Dotnet.EventSourcing.Application.Commands.AssignIncident;
+﻿using Dotnet.EventSourcing.Application.Commands.AcknowledgeIncident;
+using Dotnet.EventSourcing.Application.Commands.AssignIncident;
 using Dotnet.EventSourcing.Application.Commands.CreateUser;
+using Dotnet.EventSourcing.Application.Commands.MoveIncidentToInProgress;
+using Dotnet.EventSourcing.Application.Commands.MoveIncidentToStandBy;
 using Dotnet.EventSourcing.Application.Commands.OpenIncident;
 using Dotnet.EventSourcing.Application.Queries;
 using Dotnet.EventSourcing.Domain.IncidentDomain;
@@ -42,6 +45,9 @@ builder.Services.AddScoped<ICreateUserCommand, CreateUserCommand>();
 builder.Services.AddScoped<IIncidentQueries, IncidentQueries>();
 builder.Services.AddScoped<IOpenIncidentCommand, OpenIncidentCommand>();
 builder.Services.AddScoped<IAssignIncidentCommand, AssignIncidentCommand>();
+builder.Services.AddScoped<IMoveIncidentToStandByCommand, MoveIncidentToStandByCommand>();
+builder.Services.AddScoped<IMoveIncidentToInProgressCommand, MoveIncidentToInProgressCommand>();
+builder.Services.AddScoped<IAcknowledgeIncidentCommand, AcknowledgeIncidentCommand>();
 
 var app = builder.Build();
 

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using Dotnet.EventSourcing.Domain.IncidentDomain;
 using Dotnet.EventSourcing.Domain.UserDomain;
 using Dotnet.EventSourcing.SharedKernel;
@@ -90,15 +91,17 @@ namespace Dotnet.EventSourcing.Infrastructure.Contexts
             builder.Property(isc => isc.ChangedDateTime);
         }
 
-        public async Task<int> SaveChangesAsync()
+        public async Task<int> TrySaveChangesAsync()
         {
             return await base.SaveChangesAsync();
         }
 
-        public async Task<int> SaveChangesAsyncWithCancellationToken(CancellationToken cancellationToken)
+        public async Task<int> TrySaveChangesAsync(CancellationToken cancellationToken)
         {
             return await base.SaveChangesAsync(cancellationToken);
         }
+
+
     }
 }
 
