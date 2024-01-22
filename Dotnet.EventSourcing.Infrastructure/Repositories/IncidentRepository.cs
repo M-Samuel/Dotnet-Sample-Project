@@ -21,6 +21,15 @@ namespace Dotnet.EventSourcing.Infrastructure.Repositories
             await _databaseContext.AddAsync(incident, cancellationToken);
         }
 
+        public async Task<Incident[]> GetAllIncidents(CancellationToken cancellationToken)
+        {
+            return await _databaseContext.Incidents
+                .Include(i => i.Customer)
+                .Include(i => i.Assignee)
+                .AsQueryable()
+                .ToArrayAsync(cancellationToken);
+        }
+
         public async Task<Incident?> GetIncidentByIdAsync(Guid incidentId, CancellationToken cancellationToken)
         {
             return await _databaseContext.Incidents

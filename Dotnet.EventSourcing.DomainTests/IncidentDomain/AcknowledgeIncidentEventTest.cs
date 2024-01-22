@@ -109,6 +109,11 @@ public class AcknowledgeIncidentEventTest
             throw new NotImplementedException();
         }
 
+        public Task<Incident[]> GetAllIncidents(CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task<Incident?> GetIncidentByIdAsync(Guid incidentId, CancellationToken cancellationToken)
         {
             Incident incident = Incident.CreateNew(
@@ -133,6 +138,11 @@ public class AcknowledgeIncidentEventTest
     private class FakeIncident_RetursIncidentNotExistsError_FakeIncidentRepository : IIncidentRepository
     {
         public Task CreateIncidentAsync(Incident incident, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<Incident[]> GetAllIncidents(CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }

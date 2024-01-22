@@ -55,6 +55,11 @@ public class OpenIncidentEventTest
             await Task.CompletedTask;
         }
 
+        public Task<Incident[]> GetAllIncidents(CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
         public Task<Incident?> GetIncidentByIdAsync(Guid incidentId, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
@@ -109,6 +114,11 @@ public class OpenIncidentEventTest
         public async Task CreateIncidentAsync(Incident incident, CancellationToken cancellationToken)
         {
             await Task.CompletedTask;
+        }
+
+        public Task<Incident[]> GetAllIncidents(CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
         }
 
         public Task<Incident?> GetIncidentByIdAsync(Guid incidentId, CancellationToken cancellationToken)

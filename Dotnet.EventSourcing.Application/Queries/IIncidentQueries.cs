@@ -11,5 +11,6 @@ namespace Dotnet.EventSourcing.Application.Queries
     public interface IIncidentQueries
     {
         Task<Incident?> GetIncidentByIdAsync(Guid incidentId, EventId eventId, CancellationToken cancellationToken);
+        Task<Incident[]> GetAllIncidents(EventId eventId, CancellationToken cancellationToken);
     }
 }

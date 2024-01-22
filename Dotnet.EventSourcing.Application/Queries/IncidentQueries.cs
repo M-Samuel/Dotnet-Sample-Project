@@ -20,6 +20,12 @@ namespace Dotnet.EventSourcing.Application.Queries
             _logger = logger;
         }
 
+        public async Task<Incident[]> GetAllIncidents(EventId eventId, CancellationToken cancellationToken)
+        {
+            _logger.LogInformation(eventId, $"{nameof(GetAllIncidents)} called");
+            return await _incidentRepository.GetAllIncidents(cancellationToken);
+        }
+
         public async Task<Incident?> GetIncidentByIdAsync(Guid incidentId, EventId eventId, CancellationToken cancellationToken)
         {
             _logger.LogInformation(eventId, $"{nameof(GetIncidentByIdAsync)} called with parameters: incidentId {incidentId}");

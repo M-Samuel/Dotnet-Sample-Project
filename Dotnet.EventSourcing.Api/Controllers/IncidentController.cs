@@ -140,6 +140,16 @@ namespace Dotnet.EventSourcing.Api.Controllers
             return await ProcessNonCreateCommand(_resumeIncidentCommand, formData, cancellationToken);
         }
 
+
+        [HttpPost("/incident/all")]
+
+        public async Task<ActionResult<IncidentDTO[]>> GetAll(CancellationToken cancellationToken)
+        {
+            EventId eventId = new EventId(0, Guid.NewGuid().ToString());
+            var incidents = await _incidentQueries.GetAllIncidents(eventId, cancellationToken);
+            return incidents.Select(i => i.ToDTO()).ToArray();
+        }
+
         private async Task<ActionResult<IncidentDTO>> ProcessNonCreateCommand<TCommand, TCommandData>(TCommand command, TCommandData commandData, CancellationToken cancellationToken) where TCommand : ICommand<TCommandData, Result<Incident>>
         {
             EventId eventId = new EventId(0, Guid.NewGuid().ToString());
