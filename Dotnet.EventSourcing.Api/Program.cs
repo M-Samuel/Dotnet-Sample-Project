@@ -1,9 +1,13 @@
 ﻿using Dotnet.EventSourcing.Application.Commands.AcknowledgeIncident;
 using Dotnet.EventSourcing.Application.Commands.AssignIncident;
+using Dotnet.EventSourcing.Application.Commands.CompleteIncident;
 using Dotnet.EventSourcing.Application.Commands.CreateUser;
 using Dotnet.EventSourcing.Application.Commands.MoveIncidentToInProgress;
 using Dotnet.EventSourcing.Application.Commands.MoveIncidentToStandBy;
 using Dotnet.EventSourcing.Application.Commands.OpenIncident;
+using Dotnet.EventSourcing.Application.Commands.ReOpenIncident;
+using Dotnet.EventSourcing.Application.Commands.ResumeIncident;
+using Dotnet.EventSourcing.Application.Commands.ValidateIncident;
 using Dotnet.EventSourcing.Application.Queries;
 using Dotnet.EventSourcing.Domain.IncidentDomain;
 using Dotnet.EventSourcing.Domain.UserDomain;
@@ -48,6 +52,10 @@ builder.Services.AddScoped<IAssignIncidentCommand, AssignIncidentCommand>();
 builder.Services.AddScoped<IMoveIncidentToStandByCommand, MoveIncidentToStandByCommand>();
 builder.Services.AddScoped<IMoveIncidentToInProgressCommand, MoveIncidentToInProgressCommand>();
 builder.Services.AddScoped<IAcknowledgeIncidentCommand, AcknowledgeIncidentCommand>();
+builder.Services.AddScoped<IReOpenIncidentCommand, ReOpenIncidentCommand>();
+builder.Services.AddScoped<IValidateIncidentCommand, ValidateIncidentCommand>();
+builder.Services.AddScoped<IResumeIncidentCommand, ResumeIncidentCommand>();
+builder.Services.AddScoped<ICompleteIncidentCommand, CompleteIncidentCommand>();
 
 var app = builder.Build();
 

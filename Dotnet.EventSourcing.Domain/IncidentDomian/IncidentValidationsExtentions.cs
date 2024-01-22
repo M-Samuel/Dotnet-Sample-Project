@@ -13,7 +13,7 @@ namespace Dotnet.EventSourcing.Domain.IncidentDomain
         {
             return
                 incident.Status == IncidentStatus.Acknowledged ||
-                incident.Status == IncidentStatus.InProgress;
+                incident.Status == IncidentStatus.StandBy;
         }
 
         public static bool ValidateCanStandy(this Incident incident)
