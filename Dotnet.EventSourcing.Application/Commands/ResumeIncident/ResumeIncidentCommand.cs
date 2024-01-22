@@ -9,24 +9,23 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 
-namespace Dotnet.EventSourcing.Application.Commands.AssignIncident
+namespace Dotnet.EventSourcing.Application.Commands.ResumeIncident
 {
-    public class AssignIncidentCommand : IAssignIncidentCommand
+    public class ResumeIncidentCommand : IResumeIncidentCommand
     {
         private readonly IIncidentService _incidentService;
-        private readonly ILogger<OpenIncidentCommand> _logger;
+        private readonly ILogger<ResumeIncidentCommand> _logger;
         private readonly IUnitOfWork _unitOfWork;
 
-        public AssignIncidentCommand(IIncidentService incidentService, ILogger<OpenIncidentCommand> logger, IUnitOfWork unitOfWork)
+        public ResumeIncidentCommand(IIncidentService incidentService, ILogger<ResumeIncidentCommand> logger, IUnitOfWork unitOfWork)
         {
             _incidentService = incidentService;
             _logger = logger;
             _unitOfWork = unitOfWork;
         }
-
-        public async Task<Result<Incident>> ProcessCommandAsync(AssignIncidentData commandData, EventId eventId, CancellationToken cancellationToken)
+        public async Task<Result<Incident>> ProcessCommandAsync(ResumeIncidentData commandData, EventId eventId, CancellationToken cancellationToken)
         {
-            _logger.LogInformation(eventId, $"{nameof(AssignIncidentCommand)} called with parameters: {JsonSerializer.Serialize(commandData)}");
+            _logger.LogInformation(eventId, $"{nameof(ResumeIncidentCommand)} called with parameters: {JsonSerializer.Serialize(commandData)}");
 
             var result = await _incidentService.ProcessDomainEvent(commandData.ToEvent(), cancellationToken);
 

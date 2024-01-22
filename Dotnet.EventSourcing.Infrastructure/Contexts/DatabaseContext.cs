@@ -96,7 +96,7 @@ namespace Dotnet.EventSourcing.Infrastructure.Contexts
             return await base.SaveChangesAsync();
         }
 
-        public async Task<int> TrySaveChangesAsync(CancellationToken cancellationToken)
+        public async Task<int> SaveAsync(CancellationToken cancellationToken)
         {
             return await base.SaveChangesAsync(cancellationToken);
         }

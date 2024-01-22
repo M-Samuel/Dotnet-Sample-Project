@@ -30,7 +30,7 @@ namespace Dotnet.EventSourcing.Application.Commands.CreateUser
 
             var result = await _userService.ProcessDomainEvent(commandData.ToEvent(), cancellationToken);
             if(!result.HasError)
-                await _unitOfWork.TrySaveChangesAsync(cancellationToken);
+                await _unitOfWork.SaveAsync(cancellationToken);
             return result;
         }
     }

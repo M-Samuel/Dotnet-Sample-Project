@@ -5,7 +5,7 @@ namespace Dotnet.EventSourcing.SharedKernel
 	{
 		Task<int> TrySaveChangesAsync();
 
-        Task<int> TrySaveChangesAsync(CancellationToken cancellationToken);
+        Task<int> SaveAsync(CancellationToken cancellationToken);
     }
 }
 
