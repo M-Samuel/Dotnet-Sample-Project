@@ -35,7 +35,7 @@ namespace Dotnet.EventSourcing.Infrastructure.Repositories
             return await _databaseContext.Incidents
             .Include(i => i.Customer)
             .Include(i => i.Assignee)
-            .Include(i => i.IncidentStatusChanges)
+            .Include(i => i.IncidentStatusChanges.OrderBy(isc => isc.ChangedDateTime))
             .AsQueryable()
             .SingleOrDefaultAsync(incident => incident.Id == incidentId, cancellationToken);
         }
