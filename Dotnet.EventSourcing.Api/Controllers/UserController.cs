@@ -22,7 +22,7 @@ namespace Dotnet.EventSourcing.Api.Controllers
         }
 
 
-        [HttpGet("/user/{id}")]
+        [HttpGet("{id}")]
         public async Task<ActionResult<UserDTO>> GetUserById(Guid id, CancellationToken cancellationToken)
         {
             EventId eventId = new EventId(0,Guid.NewGuid().ToString());
@@ -32,7 +32,7 @@ namespace Dotnet.EventSourcing.Api.Controllers
             return Ok(user.ToDTO());
         }
 
-        [HttpPost("/user")]
+        [HttpPost()]
 
         public async Task<ActionResult<UserDTO>> CreateUser([FromForm] CreateUserData createUserData, CancellationToken cancellationToken)
         {

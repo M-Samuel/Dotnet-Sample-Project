@@ -56,7 +56,7 @@ namespace Dotnet.EventSourcing.Api.Controllers
         }
 
 
-        [HttpGet("/incident/get/{id}")]
+        [HttpGet("get/{id}")]
         public async Task<ActionResult<IncidentDTO>> GetIncidentById(Guid id, CancellationToken cancellationToken)
         {
             EventId eventId = new EventId(0, Guid.NewGuid().ToString());
@@ -66,7 +66,7 @@ namespace Dotnet.EventSourcing.Api.Controllers
             return Ok(incident.ToDTO());
         }
 
-        [HttpPost("/incident/open")]
+        [HttpPost("open")]
 
         public async Task<ActionResult<IncidentDTO>> CreateUser([FromForm] OpenIncidentData formData, CancellationToken cancellationToken)
         {
@@ -80,21 +80,21 @@ namespace Dotnet.EventSourcing.Api.Controllers
         }
 
 
-        [HttpPost("/incident/assign")]
+        [HttpPost("assign")]
 
         public async Task<ActionResult<IncidentDTO>> AssignUser([FromForm] AssignIncidentData formData, CancellationToken cancellationToken)
         {
             return await ProcessNonCreateCommand(_assignIncidentCommand, formData, cancellationToken);
         }
 
-        [HttpPost("/incident/acknowledge")]
+        [HttpPost("acknowledge")]
 
         public async Task<ActionResult<IncidentDTO>> MoveToStandy([FromForm] AcknowledgeIncidentData formData, CancellationToken cancellationToken)
         {
             return await ProcessNonCreateCommand(_acknowledgeIncidentCommand, formData, cancellationToken);
         }
 
-        [HttpPost("/incident/movetostandy")]
+        [HttpPost("movetostandy")]
 
         public async Task<ActionResult<IncidentDTO>> MoveToInProgress([FromForm] MoveIncidentToStandByData formData, CancellationToken cancellationToken)
         {
@@ -102,7 +102,7 @@ namespace Dotnet.EventSourcing.Api.Controllers
         }
 
 
-        [HttpPost("/incident/movetoinprogress")]
+        [HttpPost("movetoinprogress")]
 
         public async Task<ActionResult<IncidentDTO>> MoveToStandy([FromForm] MoveIncidentToInProgressData formData, CancellationToken cancellationToken)
         {
@@ -111,14 +111,14 @@ namespace Dotnet.EventSourcing.Api.Controllers
 
 
 
-        [HttpPost("/incident/validate")]
+        [HttpPost("validate")]
 
         public async Task<ActionResult<IncidentDTO>> Validate([FromForm] ValidateIncidentData formData, CancellationToken cancellationToken)
         {
             return await ProcessNonCreateCommand(_validateIncidentCommand, formData, cancellationToken);
         }
 
-        [HttpPost("/incident/complete")]
+        [HttpPost("complete")]
 
         public async Task<ActionResult<IncidentDTO>> Complete([FromForm] CompleteIncidentData formData, CancellationToken cancellationToken)
         {
@@ -126,14 +126,14 @@ namespace Dotnet.EventSourcing.Api.Controllers
         }
 
 
-        [HttpPost("/incident/reopen")]
+        [HttpPost("reopen")]
 
         public async Task<ActionResult<IncidentDTO>> ReOpen([FromForm] ReOpenIncidentData formData, CancellationToken cancellationToken)
         {
             return await ProcessNonCreateCommand(_reOpenIncidentCommand, formData, cancellationToken);
         }
 
-        [HttpPost("/incident/resume")]
+        [HttpPost("resume")]
 
         public async Task<ActionResult<IncidentDTO>> Resume([FromForm] ResumeIncidentData formData, CancellationToken cancellationToken)
         {
@@ -141,7 +141,7 @@ namespace Dotnet.EventSourcing.Api.Controllers
         }
 
 
-        [HttpPost("/incident/all")]
+        [HttpGet("all")]
 
         public async Task<ActionResult<IncidentDTO[]>> GetAll(CancellationToken cancellationToken)
         {
