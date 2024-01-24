@@ -2,6 +2,7 @@
 using Dotnet.EventSourcing.Domain.UserDomain;
 using Dotnet.EventSourcing.Domain.UserDomain.UserDomainEvents;
 using Dotnet.EventSourcing.Domain.UserDomain.UserErrors;
+using Moq;
 using System.Threading;
 
 namespace Dotnet.EventSourcing.DomainTests.UserDomain;
@@ -20,7 +21,13 @@ public class CreateUserEventTest
     [Test]
     public async Task CreateUserEvent_Correct_ReturnsNoError()
     {
-        IUserRepository userRepository = new Correct_ReturnsNoError_FakeUserRepository();
+
+        var usrMock = new Mock<IUserRepository>();
+        usrMock
+            .Setup(usr => usr.CreateUserAsync(It.IsAny<User>(), It.IsAny<CancellationToken>()))
+            .Returns(Task.FromResult<Task>(Task.CompletedTask));
+
+        IUserRepository userRepository = usrMock.Object;
         var userService = new UserService(userRepository);
 
         var createUserEvent = new CreateUserEvent(
@@ -36,7 +43,15 @@ public class CreateUserEventTest
     [Test]
     public async Task CreateUserEvent_Duplicate_ReturnsUserAlreadyExistsError()
     {
-        IUserRepository userRepository = new Duplicate_ReturnsUserAlreadyExistsError_FakeUserRepository();
+        var usrMock = new Mock<IUserRepository>();
+        usrMock
+            .Setup(usr => usr.CreateUserAsync(It.IsAny<User>(), It.IsAny<CancellationToken>()))
+            .Returns(Task.FromResult<Task>(Task.CompletedTask));
+        usrMock
+            .Setup(usr => usr.GetUserByNameAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
+            .Returns(Task.FromResult<User?>(new User()));
+
+        IUserRepository userRepository = usrMock.Object;
         var userService = new UserService(userRepository);
 
         var createUserEvent = new CreateUserEvent(
@@ -52,7 +67,12 @@ public class CreateUserEventTest
     [Test]
     public async Task CreateUserEvent_NoFirstName_ReturnsUserFirstNameEmptyError()
     {
-        IUserRepository userRepository = new NoFirstName_ReturnsUserFirstNameEmptyError_FakeUserRepository();
+        var usrMock = new Mock<IUserRepository>();
+        usrMock
+            .Setup(usr => usr.CreateUserAsync(It.IsAny<User>(), It.IsAny<CancellationToken>()))
+            .Returns(Task.FromResult<Task>(Task.CompletedTask));
+
+        IUserRepository userRepository = usrMock.Object; 
         var userService = new UserService(userRepository);
 
         var createUserEvent = new CreateUserEvent(
@@ -68,7 +88,12 @@ public class CreateUserEventTest
     [Test]
     public async Task CreateUserEvent_NoLastName_ReturnsUserLastNameEmptyError()
     {
-        IUserRepository userRepository = new NoLastName_ReturnsUserLastNameEmptyError_FakeUserRepository();
+        var usrMock = new Mock<IUserRepository>();
+        usrMock
+            .Setup(usr => usr.CreateUserAsync(It.IsAny<User>(), It.IsAny<CancellationToken>()))
+            .Returns(Task.FromResult<Task>(Task.CompletedTask));
+
+        IUserRepository userRepository = usrMock.Object;
         var userService = new UserService(userRepository);
 
         var createUserEvent = new CreateUserEvent(
@@ -80,57 +105,4 @@ public class CreateUserEventTest
 
         Assert.IsTrue(result.DomainErrors.Any(error => error is UserLastNameEmptyError));
     }
-
-
-    private class Correct_ReturnsNoError_FakeUserRepository : IUserRepository
-    {
-        public async Task CreateUserAsync(User user, CancellationToken cancellationToken)
-            => await Task.CompletedTask;
-
-        public Task<User?> GetUserByIdAsync(Guid userId, CancellationToken cancellationToken)
-            => throw new NotImplementedException();
-
-        public async Task<User?> GetUserByNameAsync(string firstName, string lastName, CancellationToken cancellationToken)
-            => await Task.FromResult<User?>(null);
-    }
-
-    private class Duplicate_ReturnsUserAlreadyExistsError_FakeUserRepository : IUserRepository
-    {
-        public async Task CreateUserAsync(User user, CancellationToken cancellationToken)
-            => await Task.CompletedTask;
-
-        public Task<User?> GetUserByIdAsync(Guid userId, CancellationToken cancellationToken)
-            => throw new NotImplementedException();
-
-        public async Task<User?> GetUserByNameAsync(string firstName, string lastName, CancellationToken cancellationToken)
-        {
-            User user = User.Create(firstName, lastName);
-            return await Task.FromResult<User?>(user);
-        }
-    }
-
-    private class NoFirstName_ReturnsUserFirstNameEmptyError_FakeUserRepository : IUserRepository
-    {
-        public async Task CreateUserAsync(User user, CancellationToken cancellationToken)
-            => await Task.CompletedTask;
-
-        public Task<User?> GetUserByIdAsync(Guid userId, CancellationToken cancellationToken)
-            => throw new NotImplementedException();
-
-        public async Task<User?> GetUserByNameAsync(string firstName, string lastName, CancellationToken cancellationToken)
-            => await Task.FromResult<User?>(null);
-    }
-
-    private class NoLastName_ReturnsUserLastNameEmptyError_FakeUserRepository : IUserRepository
-    {
-        public async Task CreateUserAsync(User user, CancellationToken cancellationToken)
-            => await Task.CompletedTask;
-
-        public Task<User?> GetUserByIdAsync(Guid userId, CancellationToken cancellationToken)
-            => throw new NotImplementedException();
-
-        public async Task<User?> GetUserByNameAsync(string firstName, string lastName, CancellationToken cancellationToken)
-            => await Task.FromResult<User?>(null);
-    }
-
 }
