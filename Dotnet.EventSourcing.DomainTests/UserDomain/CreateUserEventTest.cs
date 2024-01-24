@@ -25,7 +25,7 @@ public class CreateUserEventTest
         var usrMock = new Mock<IUserRepository>();
         usrMock
             .Setup(usr => usr.CreateUserAsync(It.IsAny<User>(), It.IsAny<CancellationToken>()))
-            .Returns(Task.FromResult<Task>(Task.CompletedTask));
+            .Returns(Task.CompletedTask);
 
         IUserRepository userRepository = usrMock.Object;
         var userService = new UserService(userRepository);
@@ -46,7 +46,7 @@ public class CreateUserEventTest
         var usrMock = new Mock<IUserRepository>();
         usrMock
             .Setup(usr => usr.CreateUserAsync(It.IsAny<User>(), It.IsAny<CancellationToken>()))
-            .Returns(Task.FromResult<Task>(Task.CompletedTask));
+            .Returns(Task.CompletedTask);
         usrMock
             .Setup(usr => usr.GetUserByNameAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
             .Returns(Task.FromResult<User?>(new User()));
@@ -70,7 +70,7 @@ public class CreateUserEventTest
         var usrMock = new Mock<IUserRepository>();
         usrMock
             .Setup(usr => usr.CreateUserAsync(It.IsAny<User>(), It.IsAny<CancellationToken>()))
-            .Returns(Task.FromResult<Task>(Task.CompletedTask));
+            .Returns(Task.CompletedTask);
 
         IUserRepository userRepository = usrMock.Object; 
         var userService = new UserService(userRepository);
@@ -91,7 +91,7 @@ public class CreateUserEventTest
         var usrMock = new Mock<IUserRepository>();
         usrMock
             .Setup(usr => usr.CreateUserAsync(It.IsAny<User>(), It.IsAny<CancellationToken>()))
-            .Returns(Task.FromResult<Task>(Task.CompletedTask));
+            .Returns(Task.CompletedTask);
 
         IUserRepository userRepository = usrMock.Object;
         var userService = new UserService(userRepository);

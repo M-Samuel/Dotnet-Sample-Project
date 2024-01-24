@@ -59,7 +59,7 @@ public class OpenIncidentEventTest
         var incMock = new Mock<IIncidentRepository>();
         incMock
             .Setup(inc => inc.CreateIncidentAsync(It.IsAny<Incident>(), It.IsAny<CancellationToken>()))
-            .Returns(Task.FromResult<Task>(Task.CompletedTask));
+            .Returns(Task.CompletedTask);
 
 
         IUserRepository userRepository = usrMock.Object;
