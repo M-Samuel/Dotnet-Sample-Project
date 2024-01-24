@@ -27,6 +27,7 @@ namespace Dotnet.EventSourcing.Infrastructure.Repositories
                 .Include(i => i.Customer)
                 .Include(i => i.Assignee)
                 .AsQueryable()
+                .OrderByDescending(i => i.CreatedDate)
                 .ToArrayAsync(cancellationToken);
         }
 
