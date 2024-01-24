@@ -1,5 +1,5 @@
-﻿using Dotnet.EventSourcing.Application.Commands.CreateUser;
-using Dotnet.EventSourcing.Application.DTOS;
+﻿using Dotnet.EventSourcing.Api.DTOS;
+using Dotnet.EventSourcing.Application.Commands.CreateUser;
 using Dotnet.EventSourcing.Application.Queries;
 using Dotnet.EventSourcing.Domain.UserDomain;
 using Dotnet.EventSourcing.SharedKernel;

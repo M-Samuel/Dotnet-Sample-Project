@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Dotnet.EventSourcing.Application.DTOS
+namespace Dotnet.EventSourcing.Api.DTOS
 {
     public class IncidentStatusChangeDTO
     {

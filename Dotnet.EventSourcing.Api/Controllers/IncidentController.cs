@@ -1,4 +1,5 @@
-﻿using Dotnet.EventSourcing.Application.Commands.AcknowledgeIncident;
+﻿using Dotnet.EventSourcing.Api.DTOS;
+using Dotnet.EventSourcing.Application.Commands.AcknowledgeIncident;
 using Dotnet.EventSourcing.Application.Commands.AssignIncident;
 using Dotnet.EventSourcing.Application.Commands.CompleteIncident;
 using Dotnet.EventSourcing.Application.Commands.MoveIncidentToInProgress;
@@ -7,7 +8,6 @@ using Dotnet.EventSourcing.Application.Commands.OpenIncident;
 using Dotnet.EventSourcing.Application.Commands.ReOpenIncident;
 using Dotnet.EventSourcing.Application.Commands.ResumeIncident;
 using Dotnet.EventSourcing.Application.Commands.ValidateIncident;
-using Dotnet.EventSourcing.Application.DTOS;
 using Dotnet.EventSourcing.Application.Queries;
 using Dotnet.EventSourcing.Domain.IncidentDomain;
 using Dotnet.EventSourcing.SharedKernel;
